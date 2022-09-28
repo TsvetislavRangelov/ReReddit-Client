@@ -1,26 +1,37 @@
-import React from 'react';
-import logo from './logo.svg';
+import{ useEffect } from 'react';
 import './App.css';
+import { useGetUsers } from "./api/UserAPI";
 
 function App() {
+  const [users, error, loading,  getUsers] = useGetUsers();
+  
+  useEffect(() => {
+    getUsers();
+  }, [])
+
+  if(error){
+    return <div>A {error.message} has occured</div>
+  }
+  if(loading){
+    return <div>Loading...</div>
+  }
+  if(!users){
+    return <div>No data was found.</div>
+  }
+
+  const userRenderer = users.map(user => (
+    (
+      <div key={user.id}>
+        {user.id} - {user.username}
+        </div>
+    )
+  ))
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <h1>Random placeholder text</h1>
+      <div>{userRenderer}</div>
     </div>
   );
-}
+};
 
 export default App;
