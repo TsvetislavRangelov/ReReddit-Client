@@ -1,16 +1,17 @@
-import axios, { AxiosError } from 'axios';
+import axiosInstance from './AxiosConfig';
 import { useState } from 'react';
-import { User } from './User';
+import { User } from './types/User';
+import { AxiosError } from 'axios';
 
 export const useGetUsers = (): [User[], AxiosError | undefined, boolean, () => Promise<void>] =>{
     const [users, setUsers] = useState<User[]>([]);
     const [error, setError] = useState<AxiosError>();
     const [loading, setLoading] = useState<boolean>(true);
     
-    const getUsers = async () => {
+    const getUsers = async (): Promise<void> => {
         try{
-            await axios.get('http://localhost:8080/users')
-            .then((res) => {
+            await axiosInstance.get('/users')
+                .then((res) => {
                 console.log("RES", res.data.users);
                 if(res.data.users){
                     setUsers(res.data.users as User[])
@@ -20,7 +21,7 @@ export const useGetUsers = (): [User[], AxiosError | undefined, boolean, () => P
                 setError(err);
             }).finally(() => {
                 setLoading(false);
-            });
+                   });
 
         }
         catch(err){
