@@ -1,12 +1,13 @@
 import{ useEffect } from 'react';
 import './App.css';
-import { useGetUsers } from "./api/UserAPI";
+import { useGetPosts } from "./api/PostAPI";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 function App() {
-  const [users, error, loading,  getUsers] = useGetUsers();
-  
+  const [posts, error, loading,  getPosts] = useGetPosts();
+    
   useEffect(() => {
-    getUsers();
+    getPosts();
   }, [])
 
   if(error){
@@ -15,22 +16,28 @@ function App() {
   if(loading){
     return <div>Loading...</div>
   }
-  if(!users){
+  if(!posts){
     return <div>No data was found.</div>
   }
 
-  const userRenderer = users.map(user => (
+  const postRenderer = posts.map(post => (
     (
-      <div key={user.id}>
-        {user.id} - {user.username}
+      <div key={post.id} style={{
+        display: "flex",
+        justifyContent: "center",
+        alignItems: "center"
+      }}>
+        {post.header} - {post.body} -  {post.downs} -  {post.ups} - {post.author.username}
         </div>
     )
   ))
   return (
     <div>
       <h1>Random placeholder text</h1>
-      <div>{userRenderer}</div>
+      <div>{postRenderer}</div>
     </div>
+
+    
   );
 };
 
