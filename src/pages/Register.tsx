@@ -1,10 +1,11 @@
-import { render } from "@testing-library/react";
 
-const Register = ({}) => {
+import RegistrationForm from "../components/RegisterForm";
+
+const Register = () => {
 
 
     return(
-        <div>register page</div>
+            <RegistrationForm></RegistrationForm>
     )
 }
 

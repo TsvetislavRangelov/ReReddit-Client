@@ -1,8 +1,7 @@
 import axiosInstance from './AxiosConfig';
 import { useState } from 'react';
 import { User } from './types/User';
-import axios, { AxiosError } from 'axios';
-import { hashString } from '../utils/Hasher';
+import { AxiosError } from 'axios';
 import UsernamePasswordInput from './types/UsernamePasswordInput';
 
 export const useGetUsers = (): [User[], AxiosError | undefined, boolean, () => Promise<void>] =>{
@@ -41,11 +40,10 @@ export const useRegisterUser = (): [number | undefined,
     const[loading, setLoading] = useState<boolean>(true);
 
     const registerUser = async (credentials: UsernamePasswordInput): Promise<void> => {
-        const hashedPassword = await hashString(credentials.password);
 
-        await axios.post('/users',{
+        await axiosInstance.post('/users',{
             username: credentials.username,
-            password: hashedPassword,
+            password: credentials.password,
             email: credentials.email
         
         })
@@ -61,7 +59,7 @@ export const useRegisterUser = (): [number | undefined,
             setLoading(false);
         })
         
-    }
+    };
 
 
     return [id, error, loading, registerUser];
