@@ -1,21 +1,30 @@
-import{ useEffect } from 'react';
+import{ useEffect, useState } from 'react';
 import './App.css';
-import { useGetPosts } from "./api/PostAPI";
+import { getPosts } from "./api/PostAPI";
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Post } from './api/types/Post';
 
 function App() {
-  const [posts, error, loading,  getPosts] = useGetPosts();
-    
-  useEffect(() => {
-    getPosts();
-  }, [])
+    const [posts, setPosts] = useState<Post[]>([]);
+    const[loading, setLoading] = useState<boolean>(true);
 
-  if(error){
-    return <div>A {error.message} has occured</div>
-  }
-  if(loading){
-    return <div>Loading...</div>
-  }
+    useEffect(() => {
+      getPosts().then(results => {
+        setPosts(results)
+        
+      })
+      .finally(() => {
+        setLoading(false);
+      })
+    }, [])
+
+    if(loading){
+      return <h1>Loading...</h1>
+    }
+
+    if(typeof(posts) === typeof(undefined)){
+      return <div>an error has occured</div>
+    }
   if(!posts){
     return <div>No data was found.</div>
   }

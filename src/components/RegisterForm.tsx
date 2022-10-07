@@ -1,29 +1,38 @@
-import {FormEvent, useState} from 'react';
+import {FormEvent, useEffect, useState} from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import UsernamePasswordInput from '../api/types/UsernamePasswordInput';
-import { useRegisterUser } from '../api/UserAPI';
+import { registerUser } from '../api/UserAPI';
 
 
 const RegistrationForm = () => {
-    const[id, error, loading, registerUser] = useRegisterUser();
     const[email, setEmail] = useState<string>('');
     const[username, setUsername] = useState<string>('');
     const[password, setPassword] = useState<string>('');
+    const[loading, setLoading] = useState<boolean>(false);
+    const[success, setSuccess] = useState<boolean>(false);
     let err;    
 
      const handleSubmit = (e: FormEvent) => {
         e.preventDefault();
-        console.log(`Submission: ${email} : ${password} : ${username}`);
 
         const credentials: UsernamePasswordInput = {
             email,
             username,
             password
         }
-        registerUser(credentials);   
+        setLoading(true);
+        registerUser(credentials)
+        .then((res) => {
+          if(res){
+            setSuccess(true);
+          }
+        })
+        .finally(() => {
+          setLoading(false);
+        });
      }
 
-     if(id !== undefined){
+     if(success){
         return(<h1 style={{
             display: 'flex',
         justifyContent: 'center',
@@ -31,11 +40,9 @@ const RegistrationForm = () => {
         height: '100vh'
         }}>Registration Successful</h1>)
      }
-     if(error){
-        err = <div>a server error has occured</div>
-     }
-     else{
-        err = <div></div>
+
+     if(loading){
+      return <h1>Loading...</h1>
      }
 
 
