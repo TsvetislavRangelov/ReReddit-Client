@@ -1,51 +1,16 @@
-import {FormEvent, useEffect, useState} from 'react';
 import { Button, Container, Form } from 'react-bootstrap';
 import UsernamePasswordInput from '../api/types/UsernamePasswordInput';
 import { registerUser } from '../api/UserAPI';
+import {useForm, SubmitHandler} from "react-hook-form";
 
 
 const RegistrationForm = () => {
-    const[email, setEmail] = useState<string>('');
-    const[username, setUsername] = useState<string>('');
-    const[password, setPassword] = useState<string>('');
-    const[loading, setLoading] = useState<boolean>(false);
-    const[success, setSuccess] = useState<boolean>(false);
-    let err;    
+    const {register, handleSubmit, watch, formState: {errors}} = useForm<UsernamePasswordInput>();
 
-     const handleSubmit = (e: FormEvent) => {
-        e.preventDefault();
-
-        const credentials: UsernamePasswordInput = {
-            email,
-            username,
-            password
-        }
-        setLoading(true);
-        registerUser(credentials)
-        .then((res) => {
-          if(res){
-            setSuccess(true);
-          }
-        })
-        .finally(() => {
-          setLoading(false);
-        });
+     const onSubmit: SubmitHandler<UsernamePasswordInput> = async (credentials) => {
+        await registerUser(credentials);
+        
      }
-
-     if(success){
-        return(<h1 style={{
-            display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh'
-        }}>Registration Successful</h1>)
-     }
-
-     if(loading){
-      return <h1>Loading...</h1>
-     }
-
-
     return (
         <Container style={{
         display: 'flex',
@@ -54,10 +19,11 @@ const RegistrationForm = () => {
         height: '100vh',
         }}>
             
-       <Form onSubmit={handleSubmit}>
+       <Form onSubmit={handleSubmit(onSubmit)}>
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
-        <Form.Control type="email" placeholder="Enter email" value={email} onChange={(e) => setEmail(e.target.value)}/>
+        <Form.Control type="email" placeholder="Enter email" {...register("email", {required: true})}/>
+        {errors.username && <span>This field is required</span>}
         <Form.Text className="text-muted">
           We'll never share your email with anyone else.
         </Form.Text>
@@ -65,18 +31,19 @@ const RegistrationForm = () => {
       <Form.Group className="mb-3" controlId="formBasicUsername">
         <Form.Label>Username</Form.Label>
         <Form.Control type="username" placeholder="Enter username" 
-        value={username} onChange={(e) => setUsername(e.target.value)}></Form.Control>
+        {...register("username", {required: true})}></Form.Control>
+        {errors.username && <span>This field is required</span>}
       </Form.Group>
 
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
-        <Form.Control type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)}/>
+        <Form.Control type="password" placeholder="Password" {...register("password", {required: true})}/>
+        {errors.password && <span>This field is required</span>}
       </Form.Group>
       <Button variant="primary" type="submit">
         Submit
       </Button>
     </Form>  
-    <div>{err}</div>
    </Container>
     )  
 }
