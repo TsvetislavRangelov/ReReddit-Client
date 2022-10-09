@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { getPosts } from "../api/PostAPI";
 import { Post } from "../api/types/Post";
+import ServerError from "../components/ServerError";
 
 const FrontPage = () => {
      const [posts, setPosts] = useState<Post[]>([]);
@@ -17,14 +18,14 @@ const FrontPage = () => {
     }, [])
 
     if(loading){
-      return <h1>Loading...</h1>
+      return (<ServerError message="Loading..."></ServerError>)
     }
 
     if(typeof(posts) === typeof(undefined)){
-      return <div>an error has occured</div>
+      return(<ServerError message="An unknown server error has occured"></ServerError>);
     }
   if(!posts){
-    return <div>No data was found.</div>
+    return (<ServerError message="No data was found."></ServerError>)
   }
 
   const postRenderer = posts.map(post => (
