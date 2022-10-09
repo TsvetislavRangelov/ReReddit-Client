@@ -6,19 +6,16 @@ import reportWebVitals from './reportWebVitals';
 import NavBar from './components/NavBar';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Register from './pages/Register';
+import { Nav } from 'react-bootstrap';
 
 const root = ReactDOM.createRoot(
   document.getElementById('root') as HTMLElement
 );
 root.render(
-    <BrowserRouter> 
-    <Routes>
-       <Route path="/" element={
-        <><NavBar /><App /></>} />
-      <Route path="Register" element={<Register />} />
-    </Routes>
+    <BrowserRouter>
+      <App />
+      
     </BrowserRouter>
-
   
 );
 
