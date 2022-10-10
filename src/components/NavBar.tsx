@@ -7,17 +7,12 @@ const NavBar = () => {
       <Navbar bg="dark" expand="lg">
       <Container>
         <Navbar.Brand>
-          <NavLink to="/">
+          <NavLink className="no-underline text-xxl text-white" to="/">
             ReReddit
           </NavLink>
         </Navbar.Brand>
         <Navbar.Toggle aria-controls="basic-navbar-nav" />
         <Navbar.Collapse id="basic-navbar-nav">
-          <Nav className="me-auto">
-          <NavLink to="Register">
-            Register
-          </NavLink>
-          </Nav>
         </Navbar.Collapse>
         <Form className="d-flex">
             <Form.Control
@@ -29,7 +24,10 @@ const NavBar = () => {
             <Button variant="outline-success">Search</Button>
           </Form>
           <Nav.Item>
-          <NavLink className="text-xl " to="Login">Login</NavLink>
+            <div className="d-flex pl-4 justify-between">
+          <NavLink className="text-xl no-underline text-white ml-4" to="Login">Login</NavLink>
+          <NavLink className="text-xl no-underline text-white ml-4 " to="Register">Register</NavLink>
+            </div>
           </Nav.Item>
       </Container>
     </Navbar>

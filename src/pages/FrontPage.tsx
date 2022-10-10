@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import { getPosts } from "../api/PostAPI";
 import { Post } from "../api/types/Post";
+import PostContainer from "../components/PostContainer";
+
 import ServerError from "../components/ServerError";
 
 const FrontPage = () => {
@@ -30,22 +32,25 @@ const FrontPage = () => {
 
   const postRenderer = posts.map(post => (
     (
-      <div key={post.id} style={{
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center"
-      }}>
-        {post.header} - {post.body} -  {post.downs} -  {post.ups} - {post.author.username}
-        </div>
+      <PostContainer id={post.id}
+      header={post.header}
+      body={post.body}
+      author={post.author}
+      ups={post.ups}
+      downs={post.downs}
+      ></PostContainer>
     )
   ))
   return (
       <div>
-      <h1 className="text-5x1 font-bold underline">Random placeho</h1>
-      <div>{postRenderer}</div>
+      <div className="flex flex-col justify-center items-center">{postRenderer}</div>
     </div>
   );
 }
+
+// justifyContent: 'center',
+//         alignItems: 'center',
+//         height: '100vh',
 
 
 export default FrontPage;
