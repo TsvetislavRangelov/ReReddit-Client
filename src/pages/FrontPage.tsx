@@ -6,7 +6,7 @@ import PostContainer from "../components/PostContainer";
 import ServerError from "../components/ServerError";
 
 const FrontPage = () => {
-     const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<Post[]>([]);
     const[loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
@@ -32,7 +32,7 @@ const FrontPage = () => {
 
   const postRenderer = posts.map(post => (
     (
-      <PostContainer id={post.id}
+      <PostContainer key={post.id} id={post.id}
       header={post.header}
       body={post.body}
       author={post.author}
@@ -47,10 +47,5 @@ const FrontPage = () => {
     </div>
   );
 }
-
-// justifyContent: 'center',
-//         alignItems: 'center',
-//         height: '100vh',
-
 
 export default FrontPage;

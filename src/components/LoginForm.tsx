@@ -1,27 +1,29 @@
 import { Button, Container, Form } from 'react-bootstrap';
-import UsernamePasswordInput from '../api/types/UsernamePasswordInput';
-import { registerUser } from '../api/UserAPI';
+import { login } from '../api/UserAPI';
 import {useForm, SubmitHandler} from "react-hook-form";
+import LoginInput from '../api/types/LoginInput';
+import { useNavigate } from 'react-router';
 import IncorrectCredentials from './errors/IncorrectCredentials';
 import { useState } from 'react';
-import { useNavigate } from 'react-router';
 
 
-const RegistrationForm = () => {
-    const {register, handleSubmit, watch, formState: {errors}} = useForm<UsernamePasswordInput>();
-    const [error, setError] = useState<string>();
+const LoginForm = () => {
+    const {register, handleSubmit, watch, formState: {errors}} = useForm<LoginInput>();
     const navigate = useNavigate();
+    const [error, setError] = useState<string>();
 
-     const onSubmit: SubmitHandler<UsernamePasswordInput> = async (credentials) => {
-        await registerUser(credentials)
-        .then((res) => {
-          if(res === 0){
-            setError("Username or email are already taken.");
-          }
-          else{
-            navigate("/Login")
-          }
+     const onSubmit: SubmitHandler<LoginInput> = async (credentials: LoginInput) => {
+           await login(credentials)
+            .then((res) => {
+            console.log(res);
+            if(res === undefined){
+                setError("Incorrect Credentials. Try again");
+            }
+            else{
+                navigate("/");
+            }
         });
+
         
      }
     return (
@@ -37,18 +39,11 @@ const RegistrationForm = () => {
       <Form.Group className="mb-3" controlId="formBasicEmail">
         <Form.Label>Email address</Form.Label>
         <Form.Control type="email" placeholder="Enter email" {...register("email", {required: true})}/>
-        {errors.username && <span className="pr-2">This field is required</span>}
+        {errors.email && <span className="pr-2">This field is required</span>}
         <Form.Text className="text-muted">
           We'll never share your email with anyone else.
         </Form.Text>
       </Form.Group>
-      <Form.Group className="mb-3" controlId="formBasicUsername">
-        <Form.Label>Username</Form.Label>
-        <Form.Control type="username" placeholder="Enter username" 
-        {...register("username", {required: true})}></Form.Control>
-        {errors.username && <span>This field is required</span>}
-      </Form.Group>
-
       <Form.Group className="mb-3" controlId="formBasicPassword">
         <Form.Label>Password</Form.Label>
         <Form.Control type="password" placeholder="Password" {...register("password", {required: true})}/>
@@ -62,4 +57,4 @@ const RegistrationForm = () => {
     )  
 }
 
-export default RegistrationForm;
+export default LoginForm;
