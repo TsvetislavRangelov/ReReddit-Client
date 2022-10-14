@@ -6,7 +6,7 @@ import PostContainer from "../components/PostContainer";
 import ServerError from "../components/ServerError";
 
 const FrontPage = () => {
-    const [posts, setPosts] = useState<Post[]>([]);
+    const [posts, setPosts] = useState<Post[]>();
     const[loading, setLoading] = useState<boolean>(true);
 
     useEffect(() => {
