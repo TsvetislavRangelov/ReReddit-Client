@@ -5,6 +5,7 @@ import { Post } from "../api/types/Post";
 import { useEffect, useState } from "react";
 import { Spinner } from "react-bootstrap";
 import NotFound404 from "../components/errors/NotFound404";
+import ViewPost from "../components/ViewPost";
 
 const PostPage = () => {
   const params = useParams<PostQueryParams>();
@@ -38,9 +39,9 @@ const PostPage = () => {
   }
 
   return (
-    <h1>
-      Post Nr: {foundPost?.id} - {foundPost?.body}
-    </h1>
+    <div className="flex flex-col justify-center items-center mt-10">
+      <ViewPost foundPost={foundPost}></ViewPost>
+    </div>
   );
 };
 
