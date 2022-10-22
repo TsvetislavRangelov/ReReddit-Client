@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Spinner from "react-bootstrap/esm/Spinner";
+import { NavLink } from "react-router-dom";
 import { getPosts } from "../api/PostAPI";
 import { Post } from "../api/types/Post";
 import PostContainer from "../components/PostContainer";
@@ -50,6 +51,9 @@ const FrontPage = () => {
   ));
   return (
     <div className="flex flex-col justify-center items-center">
+      <NavLink to={"/submit"}>
+        <h1>Create Post!</h1>
+      </NavLink>
       <div className="flex flex-col justify-center items-center w-4/5">
         {postRenderer}
       </div>
