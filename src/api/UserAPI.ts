@@ -5,6 +5,7 @@ import LoginInput from './types/LoginInput';
 import User from './types/User';
 import LoggedInUser from './types/LoggedInUser';
 import userEvent from '@testing-library/user-event';
+import AccessToken from './auth/tokens/AccessToken';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -23,14 +24,29 @@ export const registerUser = async (credentials: UsernamePasswordInput): Promise<
     }
     };
 
-export const login = async (credentials: LoginInput): Promise<LoggedInUser | undefined> => {
-    try{
-   return (await axiosInstance.post("/login", {
-        email: credentials.email,
-        password: credentials.password
-    })).data.loggedIn as LoggedInUser;
-    }
-    catch(error){
-        console.error(error);
-    }
+export const login = async (credentials: LoginInput): Promise<AccessToken | undefined> => {
+
+        try{
+        return (await axiosInstance.post("/login", {
+            email: credentials.email,
+            password: credentials.password
+        })).data.token as AccessToken
+        }
+        catch(error){
+            if(axios.isAxiosError(error)){
+                console.error(error.message);
+            }
+        }
+        
+
+
+//     try{
+//    return (await axiosInstance.post("/login", {
+//         email: credentials.email,
+//         password: credentials.password
+//     })).data.loggedIn as LoggedInUser;
+//     }
+//     catch(error){
+//         console.error(error);
+//     }
 }
