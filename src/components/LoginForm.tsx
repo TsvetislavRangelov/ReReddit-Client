@@ -5,7 +5,7 @@ import LoginInput from "../api/types/LoginInput";
 import { useNavigate } from "react-router";
 import IncorrectCredentials from "./errors/IncorrectCredentials";
 import { useState } from "react";
-import axiosInstance, { setAuthToken } from "../api/AxiosConfig";
+import { setAuthToken } from "../api/AxiosConfig";
 
 const LoginForm = () => {
   const {
