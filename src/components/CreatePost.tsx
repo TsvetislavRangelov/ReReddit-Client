@@ -2,6 +2,8 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/PostAPI";
 import CreatePostData from "../api/types/CreatePostData";
+import LoggedInUser from "../api/types/LoggedInUser";
+import { getUser } from "../api/UserAPI";
 
 const CreatePost = () => {
   const navigate = useNavigate();
@@ -11,16 +13,25 @@ const CreatePost = () => {
     watch,
     formState: { errors },
   } = useForm<CreatePostData>();
+  //TODO: check session to validate logged in user
 
   const onSubmit: SubmitHandler<CreatePostData> = async (
     postData: CreatePostData
   ) => {
-    await createPost(postData).then((res) => {
-      console.log(res);
-      if (res !== undefined) {
-        navigate("/");
-      }
-    });
+    const author: LoggedInUser = (await getUser(
+      Number(window.sessionStorage.getItem("userId"))
+    ))!;
+    postData.author = author;
+    console.log(author);
+    if (author.id !== 0) {
+      console.log(postData);
+      await createPost(postData).then((res) => {
+        console.log(res);
+        if (res !== undefined) {
+          navigate("/");
+        }
+      });
+    }
   };
 
   return (

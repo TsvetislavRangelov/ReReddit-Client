@@ -1,9 +1,8 @@
 import axiosInstance from './AxiosConfig';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import UsernamePasswordInput from './types/UsernamePasswordInput';
 import LoginInput from './types/LoginInput';
-
-import AccessToken from './auth/tokens/AccessToken';
+import LoggedInUser from './types/LoggedInUser';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -22,16 +21,28 @@ export const registerUser = async (credentials: UsernamePasswordInput): Promise<
     }
     };
 
-export const login = async (credentials: LoginInput): Promise<AccessToken | undefined> => {
+export const login = async (credentials: LoginInput): Promise<string | undefined> => {
         try{
         return (await axiosInstance.post("/login", {
             email: credentials.email,
             password: credentials.password
-        })).data.token as AccessToken;
+        })).data.token as string;
+        
         }
         catch(error){
             if(axios.isAxiosError(error)){
                 console.error(error.message);
             }
         }
+}
+
+export const getUser = async(id: number): Promise<LoggedInUser | undefined> => {
+    try{
+        return (await axiosInstance.get(`/users/${id}`)).data as LoggedInUser;
+    }
+    catch(error){
+        if(axios.isAxiosError(error)){
+            console.error(error.message, error.code);
+        }
+    }
 }

@@ -5,7 +5,7 @@ import LoginInput from "../api/types/LoginInput";
 import { useNavigate } from "react-router";
 import IncorrectCredentials from "./errors/IncorrectCredentials";
 import { useState } from "react";
-import { setAuthToken } from "../api/AxiosConfig";
+import { decode } from "../utils/JWT-decoder";
 
 const LoginForm = () => {
   const {
@@ -21,14 +21,18 @@ const LoginForm = () => {
     credentials: LoginInput
   ) => {
     await login(credentials).then((res) => {
-      console.log(res);
       if (res === undefined) {
         setError("Incorrect Credentials. Try again");
       } else {
-        const token = res.token;
-        localStorage.setItem("token", token);
-        setAuthToken(token);
-        navigate("/");
+        const token = res;
+        const payload = decode(token);
+        if (payload instanceof Object) {
+          window.sessionStorage.setItem("userId", payload.userId.toString());
+          console.log(window.sessionStorage.getItem("userId"));
+          window.sessionStorage.setItem("accessToken", token);
+          console.log(window.sessionStorage.getItem("accessToken"));
+          navigate("/");
+        }
       }
     });
   };
