@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import { createPost } from "../api/PostAPI";
@@ -7,13 +8,19 @@ import { getUser } from "../api/UserAPI";
 
 const CreatePost = () => {
   const navigate = useNavigate();
+  const token = window.sessionStorage.getItem("accessToken");
+  useEffect(() => {
+    if (!token) {
+      navigate("/login");
+    }
+  });
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<CreatePostData>();
-  //TODO: check session to validate logged in user
+  //gotta check OAuth token here
 
   const onSubmit: SubmitHandler<CreatePostData> = async (
     postData: CreatePostData
@@ -22,11 +29,10 @@ const CreatePost = () => {
       Number(window.sessionStorage.getItem("userId"))
     ))!;
     postData.author = author;
-    console.log(author);
+    console.log(author.id, author.email);
     if (author.id !== 0) {
       console.log(postData);
       await createPost(postData).then((res) => {
-        console.log(res);
         if (res !== undefined) {
           navigate("/");
         }

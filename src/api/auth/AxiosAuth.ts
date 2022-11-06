@@ -1,12 +1,16 @@
 import axios, { AxiosRequestConfig } from "axios";
 
-export const axiosAuth = axios.create();
+export const axiosAuth = axios.create({
+    baseURL: 'http://localhost:8080'
+}
+);
 
 
 axiosAuth.interceptors.request.use(
     async(config: AxiosRequestConfig) => {
         const accessToken = window.sessionStorage.getItem('accessToken');
-        if(!config.headers!['Authorization']){
+        console.log(accessToken);
+        if(!config.headers!['Authorization'] && accessToken){
             config.headers!['Authorization'] = `Bearer ${accessToken}`;
         }
         return config;

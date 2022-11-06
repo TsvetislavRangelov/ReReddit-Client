@@ -1,9 +1,9 @@
-import User from "./User";
+import LoggedInUser from "./LoggedInUser";
 
 type CreatePostData = {
     header: string;
     body: string;
-    author: User
+    author: LoggedInUser
 
 }
 
