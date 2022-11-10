@@ -15,11 +15,14 @@ const RegistrationForm = () => {
      const onSubmit: SubmitHandler<UsernamePasswordInput> = async (credentials) => {
         await registerUser(credentials)
         .then((res) => {
-          if(res === 0){
-            setError("Username or email are already taken.");
+          if(res !== undefined){
+            setError("Registration successful");
+          }
+          else if(res === undefined){
+            setError("A server error has occured");
           }
           else{
-            navigate("/Login")
+            navigate("/Login");
           }
         });
         
