@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { Stack } from "react-bootstrap";
 import Spinner from "react-bootstrap/esm/Spinner";
 import { NavLink } from "react-router-dom";
 import { getPosts } from "../api/PostAPI";
@@ -54,9 +55,9 @@ const FrontPage = () => {
       <NavLink to={"/submit"}>
         <h1>Create Post!</h1>
       </NavLink>
-      <div className="flex flex-col justify-center items-center w-4/5">
+      <Stack gap={3} className="col-md-4 mx-auto">
         {postRenderer}
-      </div>
+      </Stack>
     </div>
   );
 };

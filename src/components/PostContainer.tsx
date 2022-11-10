@@ -1,11 +1,11 @@
 import { NavLink } from "react-router-dom";
 import { Post } from "../api/types/Post";
 
-const PostContainer = (props: Post) => {
+const PostContainer = (props: Post, { className: string = "" }) => {
   return (
-    <NavLink className="no-underline" to={`/post/${props.id}`}>
-      <div key={props.id} className="border-2 mt-2 items-center w-100">
-        <div className="flex flex-row">
+    <NavLink className="no-underline " to={`/post/${props.id}`}>
+      <div key={props.id} className="border-2 mt-2 items-center flex text-left">
+        <div className="flex flex-column">
           <svg
             xmlns="http://www.w3.org/2000/svg"
             fill="none"
