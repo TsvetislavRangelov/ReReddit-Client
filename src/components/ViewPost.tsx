@@ -1,11 +1,33 @@
+import { useEffect, useState } from "react";
+import { getCommentsForPost } from "../api/CommentAPI";
+import Comment from "../api/types/Comment";
+import CommentContainer from "./CommentContainer";
 import CreateComment from "./CreateComment";
 import ViewPostProps from "./props/ViewPostProps";
 
 const ViewPost = (props: ViewPostProps) => {
-  const id = props.foundPost.id;
+  const [comments, setComments] = useState<Comment[]>([]);
+
+  useEffect(() => {
+    getCommentsForPost(props.foundPost.id).then((res) => {
+      setComments(res!);
+    });
+  }, [comments]);
+
+  const commentRenderer = comments.map((comment) => (
+    <CommentContainer
+      key={comment.id}
+      id={comment.id}
+      body={comment.body}
+      author={comment.author}
+      ups={comment.ups}
+      downs={comment.downs}
+    ></CommentContainer>
+  ));
+
   return (
-    <div className="border-1 w-50 bg-gray-800 min-h-fit">
-      <div className="ml-4 flex flex-col">
+    <div className="w-50 bg-gray-800 min-h-fit">
+      <div className="ml-4 flex flex-col border-1">
         <div className="flex flex-row">
           <button className="hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
             <svg
@@ -55,12 +77,14 @@ const ViewPost = (props: ViewPostProps) => {
         </div>
         <div>{props.foundPost.body}</div>
       </div>
-      <div>
+      <div className="border-b">
         <CreateComment
           post={props.foundPost}
           author={props.foundPost.author}
         ></CreateComment>
       </div>
+
+      <div>{commentRenderer}</div>
     </div>
   );
 };

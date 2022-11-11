@@ -1,4 +1,3 @@
-
 import { Post } from "../../api/types/Post"
 import User from "../../api/types/User";
 
