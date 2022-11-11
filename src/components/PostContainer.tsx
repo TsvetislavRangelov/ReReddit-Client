@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import { Post } from "../api/types/Post";
 
-const PostContainer = (props: Post, { className: string = "" }) => {
+const PostContainer = (props: Post) => {
   return (
     <NavLink className="no-underline " to={`/post/${props.id}`}>
       <div key={props.id} className="border-2 mt-2 items-center flex text-left">
