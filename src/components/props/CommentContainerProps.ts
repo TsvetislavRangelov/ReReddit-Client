@@ -7,6 +7,7 @@ type CommentContainerProps = {
     body: string;
     ups: number;
     downs: number;
+    createdAt: Date;
 }
 
 export default CommentContainerProps;

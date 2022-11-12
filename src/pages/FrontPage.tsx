@@ -55,7 +55,7 @@ const FrontPage = () => {
       <NavLink to={"/submit"}>
         <h1>Create Post!</h1>
       </NavLink>
-      <Stack gap={3} className="col-md-4 mx-auto">
+      <Stack gap={3} className="col-md-6 mx-auto">
         {postRenderer}
       </Stack>
     </div>

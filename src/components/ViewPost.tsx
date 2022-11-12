@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { Stack } from "react-bootstrap";
 import { getCommentsForPost } from "../api/CommentAPI";
 import Comment from "../api/types/Comment";
 import CommentContainer from "./CommentContainer";
@@ -12,7 +13,7 @@ const ViewPost = (props: ViewPostProps) => {
     getCommentsForPost(props.foundPost.id).then((res) => {
       setComments(res!);
     });
-  }, [comments]);
+  }, []);
 
   const commentRenderer = comments.map((comment) => (
     <CommentContainer
@@ -22,6 +23,7 @@ const ViewPost = (props: ViewPostProps) => {
       author={comment.author}
       ups={comment.ups}
       downs={comment.downs}
+      createdAt={comment.createdAt}
     ></CommentContainer>
   ));
 
@@ -77,14 +79,22 @@ const ViewPost = (props: ViewPostProps) => {
         </div>
         <div>{props.foundPost.body}</div>
       </div>
-      <div className="border-b">
+      <div className="border-b pb-2">
         <CreateComment
           post={props.foundPost}
           author={props.foundPost.author}
         ></CreateComment>
       </div>
 
-      <div>{commentRenderer}</div>
+      {comments.length === 0 ? (
+        <h1>No comments yet!</h1>
+      ) : (
+        <div>
+          <Stack gap={3} className="mt-2 pb-2 mx-auto">
+            {commentRenderer}
+          </Stack>
+        </div>
+      )}
     </div>
   );
 };
