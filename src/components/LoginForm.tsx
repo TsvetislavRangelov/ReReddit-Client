@@ -38,6 +38,7 @@ const LoginForm = () => {
       console.log(newAuth);
 
       saveAuth(newAuth);
+      navigate("/", { replace: true });
     });
   };
   return (
