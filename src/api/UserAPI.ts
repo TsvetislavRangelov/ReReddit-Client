@@ -3,7 +3,7 @@ import axios from 'axios';
 import UsernamePasswordInput from './types/UsernamePasswordInput';
 import LoginInput from './types/LoginInput';
 import LoggedInUser from './types/LoggedInUser';
-import { axiosAuth } from './auth/AxiosAuth';
+import { axiosPrivate } from './AxiosPrivate';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -22,12 +22,12 @@ export const registerUser = async (credentials: UsernamePasswordInput): Promise<
     }
     };
 
-export const login = async (credentials: LoginInput): Promise<string | undefined> => {
+export const login = async (credentials: LoginInput): Promise<any | undefined> => {
         try{
         return (await axiosInstance.post("/login", {
             email: credentials.email,
             password: credentials.password
-        })).data.token as string;
+        })).data;
         
         }
         catch(error){
@@ -39,7 +39,7 @@ export const login = async (credentials: LoginInput): Promise<string | undefined
 
 export const getUser = async(id: number): Promise<LoggedInUser | undefined> => {
     try{
-        return (await axiosAuth.get(`/users/${id}`)).data as LoggedInUser;
+        return (await axiosPrivate.get(`/users/${id}`)).data as LoggedInUser;
     }
     catch(error){
         if(axios.isAxiosError(error)){

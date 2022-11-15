@@ -5,16 +5,20 @@ import LoginInput from "../api/types/LoginInput";
 import { useNavigate } from "react-router";
 import IncorrectCredentials from "./errors/IncorrectCredentials";
 import { useState } from "react";
-import { decode } from "../utils/JWT-decoder";
+import { AuthContext } from "../context/AuthProvider";
+import { AuthContextType, iAuth } from "../api/types/AuthTyped";
+import React from "react";
 
 const LoginForm = () => {
+  const { saveAuth } = React.useContext(AuthContext) as AuthContextType;
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<LoginInput>();
-  const navigate = useNavigate();
   const [error, setError] = useState<string>();
 
   const onSubmit: SubmitHandler<LoginInput> = async (
@@ -23,17 +27,17 @@ const LoginForm = () => {
     await login(credentials).then((res) => {
       if (res === undefined) {
         setError("Incorrect Credentials. Try again");
-      } else {
-        const token = res;
-        const payload = decode(token);
-        if (payload instanceof Object) {
-          window.sessionStorage.setItem("userId", payload.userId.toString());
-          console.log(window.sessionStorage.getItem("userId"));
-          window.sessionStorage.setItem("accessToken", token);
-          console.log(window.sessionStorage.getItem("accessToken"));
-          navigate("/");
-        }
       }
+      let newAuth: iAuth = {
+        id: res.id,
+        username: res.username,
+        roles: res.roles,
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+      };
+      console.log(newAuth);
+
+      saveAuth(newAuth);
     });
   };
   return (

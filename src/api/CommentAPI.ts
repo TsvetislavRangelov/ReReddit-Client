@@ -1,4 +1,3 @@
-import { axiosAuth } from "./auth/AxiosAuth";
 import axiosInstance from "./AxiosConfig";
 import Comment from "./types/Comment";
 import { CreateCommentData } from "./types/CreateCommentData";

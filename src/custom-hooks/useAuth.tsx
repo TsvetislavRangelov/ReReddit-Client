@@ -1,11 +1,9 @@
-import { useEffect, useState } from "react";
+import React, { useContext, useDebugValue } from "react";
+import { AuthContextType } from "../api/types/AuthTyped";
+import { AuthContext } from "../context/AuthProvider";
 
-export const useAuth = (): boolean => {
-  const [token, setToken] = useState<string>();
-
-  useEffect(() => {
-    setToken(window.sessionStorage.getItem("accessToken")!);
-  }, [token]);
-
-  return token ? true : false;
+export const useAuth = () => {
+  const { auth } = React.useContext(AuthContext) as AuthContextType;
+  useDebugValue(auth, (auth) => (auth?.username ? "Logged In" : "Logged Out"));
+  return useContext(AuthContext);
 };
