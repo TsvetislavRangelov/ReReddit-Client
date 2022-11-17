@@ -1,11 +1,25 @@
-import react from "react";
+import { AxiosInstance } from "axios";
+import React, { useEffect } from "react";
 import { Button, Form } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createComment } from "../api/CommentAPI";
+import { AuthContextType } from "../api/types/AuthTyped";
 import { CreateCommentData } from "../api/types/CreateCommentData";
+import { getUser } from "../api/UserAPI";
+import { AuthContext } from "../context/AuthProvider";
+import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
+import useRefresh from "../custom-hooks/useRefresh";
 import { CreateCommentProps } from "./props/CreateCommentProps";
 
 const CreateComment = (props: CreateCommentProps) => {
+  const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
+  const refresh = useRefresh();
+  const axiosPrivate = useAxiosPrivate(
+    refresh,
+    auth,
+    saveAuth
+  ) as AxiosInstance;
+
   const {
     register,
     handleSubmit,
@@ -16,7 +30,8 @@ const CreateComment = (props: CreateCommentProps) => {
   const onSubmit: SubmitHandler<CreateCommentData> = async (
     commentData: CreateCommentData
   ) => {
-    commentData.author = props.author;
+    const user = await getUser(auth.id, axiosPrivate);
+    commentData.author = user!;
     commentData.post = props.post;
     await createComment(commentData);
   };

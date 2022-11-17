@@ -1,13 +1,17 @@
+import React from "react";
 import { useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
 import { getCommentsForPost } from "../api/CommentAPI";
+import { AuthContextType } from "../api/types/AuthTyped";
 import Comment from "../api/types/Comment";
+import { AuthContext } from "../context/AuthProvider";
 import CommentContainer from "./CommentContainer";
 import CreateComment from "./CreateComment";
 import ViewPostProps from "./props/ViewPostProps";
 
 const ViewPost = (props: ViewPostProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
+  const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
 
   useEffect(() => {
     getCommentsForPost(props.foundPost.id).then((res) => {
@@ -79,12 +83,16 @@ const ViewPost = (props: ViewPostProps) => {
         </div>
         <div>{props.foundPost.body}</div>
       </div>
-      <div className="border-b pb-2">
-        <CreateComment
-          post={props.foundPost}
-          author={props.foundPost.author}
-        ></CreateComment>
-      </div>
+      {auth?.id !== 0 ? (
+        <div className="border-b pb-2">
+          <CreateComment
+            post={props.foundPost}
+            author={props.foundPost.author}
+          ></CreateComment>
+        </div>
+      ) : (
+        <div></div>
+      )}
 
       {comments.length === 0 ? (
         <h1>No comments yet!</h1>
