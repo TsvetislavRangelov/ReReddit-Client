@@ -1,12 +1,23 @@
 import React from "react";
 import { Nav, Navbar, Form, Button } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { AuthContext } from "../context/AuthProvider";
 
 const NavBar = () => {
+  const navigate = useNavigate();
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
+  const logout = async () => {
+    saveAuth({
+      id: 0,
+      username: "",
+      roles: [""],
+      accessToken: "",
+      refreshToken: "",
+    });
+    navigate("/Login");
+  };
   return (
     <Navbar bg="dark" expand="lg">
       <Container>
@@ -47,6 +58,7 @@ const NavBar = () => {
               <NavLink
                 className="text-xl no-underline text-white ml-4"
                 to="Login"
+                onClick={logout}
               >
                 Log Out
               </NavLink>

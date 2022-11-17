@@ -1,38 +1,43 @@
-import { useEffect } from "react";
+import { AxiosInstance } from "axios";
+import React from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { Navigate, useLocation, useNavigate } from "react-router-dom";
 import { createPost } from "../api/PostAPI";
+import { AuthContextType } from "../api/types/AuthTyped";
 import CreatePostData from "../api/types/CreatePostData";
 import LoggedInUser from "../api/types/LoggedInUser";
 import { getUser } from "../api/UserAPI";
+import { AuthContext } from "../context/AuthProvider";
+import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
+import useRefresh from "../custom-hooks/useRefresh";
 
 const CreatePost = () => {
+  const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const navigate = useNavigate();
-  const token = window.sessionStorage.getItem("accessToken");
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-    }
-  });
+  const location = useLocation();
+  const refresh = useRefresh();
+  const axiosPrivate = useAxiosPrivate(
+    refresh,
+    auth,
+    saveAuth
+  ) as AxiosInstance;
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<CreatePostData>();
-  //gotta check OAuth token here
 
   const onSubmit: SubmitHandler<CreatePostData> = async (
     postData: CreatePostData
   ) => {
-    const author: LoggedInUser = (await getUser(
-      Number(window.sessionStorage.getItem("userId"))
-    ))!;
+    const author: LoggedInUser = (await getUser(auth.id, axiosPrivate))!;
     postData.author = author;
     console.log(author.id, author.email);
     if (author.id !== 0) {
       console.log(postData);
-      await createPost(postData).then((res) => {
+      await createPost(postData, axiosPrivate).then((res) => {
         if (res !== undefined) {
           navigate("/");
         }
@@ -40,6 +45,9 @@ const CreatePost = () => {
     }
   };
 
+  if (!auth?.username) {
+    return <Navigate to="/" state={{ from: location }} />;
+  }
   return (
     <div className="flex flex-col justify-between items-center w-50 mt-10 bg-gray-900">
       <div className="flex flex-row justify-around border-b-2 w-100 items-center object-contain place-content-center bg-gray-900">

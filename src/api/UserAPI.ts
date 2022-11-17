@@ -1,9 +1,8 @@
 import axiosInstance from './AxiosConfig';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import UsernamePasswordInput from './types/UsernamePasswordInput';
 import LoginInput from './types/LoginInput';
 import LoggedInUser from './types/LoggedInUser';
-import { axiosPrivate } from './AxiosPrivate';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -37,9 +36,9 @@ export const login = async (credentials: LoginInput): Promise<any | undefined> =
         }
 }
 
-export const getUser = async(id: number): Promise<LoggedInUser | undefined> => {
+export const getUser = async(id: number, axiosPrivate: AxiosInstance): Promise<LoggedInUser | undefined> => {
     try{
-        return (await axiosPrivate.get(`/users/${id}`)).data as LoggedInUser;
+        return (await axiosPrivate.get(`/users/user`, {params: {id: id}})).data as LoggedInUser;
     }
     catch(error){
         if(axios.isAxiosError(error)){

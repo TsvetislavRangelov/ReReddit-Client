@@ -1,20 +1,22 @@
-import { AxiosRequestConfig, AxiosRequestHeaders } from "axios";
-import { clearConfigCache } from "prettier";
+import { AxiosHeaders, AxiosRequestConfig} from "axios";
 import { useEffect } from "react";
 import { axiosPrivate } from "../api/AxiosPrivate";
 import { iAuth } from "../api/types/AuthTyped";
 
 
-const useAxiosPrivate = (refresh: (auth: iAuth, saveAuth: (auth: iAuth) => void) 
-=> Promise<any>, auth: iAuth, saveAuth:(auth: iAuth) => void) => {
-     useEffect(() => {
+const useAxiosPrivate = (refresh: (auth: iAuth, saveAuth: (auth: iAuth) => void) => Promise<any>, auth: iAuth, saveAuth: (auth: iAuth) => void) => {
+
+    useEffect(() => {
         const requestIntercept = axiosPrivate.interceptors.request.use(
-            (config : AxiosRequestConfig<AxiosRequestHeaders>) => {
+            (config : AxiosRequestConfig<AxiosHeaders>) => {
                 if (config && config.headers) {
                     if(!(config.headers['Authorization'])) {
                         config.headers['Authorization'] = `Bearer ${auth?.accessToken}`;
+                        config.headers["Content-Type"] = 'application/json';
                     }
                 }
+                
+                console.log(config);
                 return config;
             }, (error) => Promise.reject(error)
         );
@@ -46,5 +48,5 @@ const useAxiosPrivate = (refresh: (auth: iAuth, saveAuth: (auth: iAuth) => void)
     }, [auth, saveAuth, refresh])
 
     return axiosPrivate;
-
 }
+export default useAxiosPrivate;

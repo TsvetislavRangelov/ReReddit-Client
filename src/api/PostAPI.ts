@@ -1,8 +1,7 @@
 import axiosInstance from "./AxiosConfig";
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { Post } from "./types/Post";
 import CreatePostData from "./types/CreatePostData";
-import { axiosPrivate } from "./AxiosPrivate";
 
 export const getPosts = async (): Promise<Post[]| undefined> => {
 
@@ -27,7 +26,7 @@ export const getPost = async (id: number): Promise<Post | undefined> => {
 }
 }
 
-export const createPost = async (postData: CreatePostData): Promise<number | undefined> => {
+export const createPost = async (postData: CreatePostData, axiosPrivate: AxiosInstance): Promise<number | undefined> => {
     try{
         return(await axiosPrivate.post(`/posts`, {
             author: postData.author,
