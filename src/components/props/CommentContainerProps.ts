@@ -1,9 +1,8 @@
-import { Post } from "../../api/types/Post";
-import User from "../../api/types/User";
+import LoggedInUser from "../../api/types/LoggedInUser";
 
 type CommentContainerProps = {
     id: number;
-    author: User;
+    author: LoggedInUser;
     body: string;
     ups: number;
     downs: number;

@@ -1,8 +1,8 @@
+import LoggedInUser from "./LoggedInUser";
 import { Post } from "./Post";
-import User from "./User";
 
 export type CreateCommentData = {
-    author: User;
+    author: LoggedInUser;
     body: string;
     post: Post;
 

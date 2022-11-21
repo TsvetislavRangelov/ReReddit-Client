@@ -1,5 +1,5 @@
 import { AxiosInstance } from "axios";
-import React, { useEffect } from "react";
+import React from "react";
 import { Button, Form } from "react-bootstrap";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { createComment } from "../api/CommentAPI";

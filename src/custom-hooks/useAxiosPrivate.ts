@@ -15,8 +15,6 @@ const useAxiosPrivate = (refresh: (auth: iAuth, saveAuth: (auth: iAuth) => void)
                         config.headers["Content-Type"] = 'application/json';
                     }
                 }
-                
-                console.log(config);
                 return config;
             }, (error) => Promise.reject(error)
         );
@@ -35,7 +33,6 @@ const useAxiosPrivate = (refresh: (auth: iAuth, saveAuth: (auth: iAuth) => void)
                         return axiosPrivate(prevRequest);
                     }
                 }else {
-                    console.log(prevRequest.status);
                     return Promise.reject(error);
                 }
             }

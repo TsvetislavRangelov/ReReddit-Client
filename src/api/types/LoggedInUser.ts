@@ -3,7 +3,7 @@ type LoggedInUser = {
     username: string;
     password: string;
     email: string;
-    role: string;
+    roles: string[];
 }
 
 export default LoggedInUser;

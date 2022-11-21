@@ -55,13 +55,21 @@ const NavBar = () => {
                 </NavLink>
               </>
             ) : (
-              <NavLink
-                className="text-xl no-underline text-white ml-4"
-                to="Login"
-                onClick={logout}
-              >
-                Log Out
-              </NavLink>
+              <div>
+                <NavLink
+                  className="text-xl no-underline text-white ml-4"
+                  to="Login"
+                  onClick={logout}
+                >
+                  Log Out
+                </NavLink>
+                <NavLink
+                  className="text-xl no-underline text-white ml-4"
+                  to="Profile"
+                >
+                  Profile
+                </NavLink>
+              </div>
             )}
           </div>
         </Nav.Item>
