@@ -1,13 +1,18 @@
+import React from "react";
 import { useState, useEffect } from "react";
+import { Stack } from "react-bootstrap";
 import Spinner from "react-bootstrap/esm/Spinner";
 import { NavLink } from "react-router-dom";
 import { getPosts } from "../api/PostAPI";
+import { AuthContextType } from "../api/types/AuthTyped";
 import { Post } from "../api/types/Post";
 import PostContainer from "../components/PostContainer";
 
 import ServerError from "../components/ServerError";
+import { AuthContext } from "../context/AuthProvider";
 
 const FrontPage = () => {
+  const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [posts, setPosts] = useState<Post[]>();
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -51,12 +56,16 @@ const FrontPage = () => {
   ));
   return (
     <div className="flex flex-col justify-center items-center">
-      <NavLink to={"/submit"}>
-        <h1>Create Post!</h1>
-      </NavLink>
-      <div className="flex flex-col justify-center items-center w-4/5">
+      {auth.id !== 0 && auth.username !== "" ? (
+        <NavLink to={"/submit"}>
+          <h1>Create Post!</h1>
+        </NavLink>
+      ) : (
+        <div></div>
+      )}
+      <Stack gap={3} className="col-md-6 mx-auto">
         {postRenderer}
-      </div>
+      </Stack>
     </div>
   );
 };

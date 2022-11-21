@@ -7,6 +7,7 @@ import NavBar from "./components/NavBar";
 import Login from "./pages/Login";
 import PostPage from "./pages/PostPage";
 import CreatePostPage from "./pages/CreatePostPage";
+import ProfilePage from "./pages/ProfilePage";
 
 function App() {
   return (
@@ -18,6 +19,7 @@ function App() {
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/Login" element={<Login></Login>} />
         <Route path="/submit" element={<CreatePostPage></CreatePostPage>} />
+        <Route path="/Profile" element={<ProfilePage></ProfilePage>}></Route>
       </Routes>
     </>
   );

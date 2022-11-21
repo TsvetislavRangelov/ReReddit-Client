@@ -22,7 +22,7 @@ const PostPage = () => {
       .finally(() => {
         setLoading(false);
       });
-  }, []);
+  }, [parsedId]);
 
   if (isNaN(parsedId)) {
     return <h1>INVALID QUERY PARAMS</h1>;

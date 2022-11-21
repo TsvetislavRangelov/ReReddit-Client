@@ -5,31 +5,40 @@ import LoginInput from "../api/types/LoginInput";
 import { useNavigate } from "react-router";
 import IncorrectCredentials from "./errors/IncorrectCredentials";
 import { useState } from "react";
-import { setAuthToken } from "../api/AxiosConfig";
+import { AuthContext } from "../context/AuthProvider";
+import { AuthContextType, iAuth } from "../api/types/AuthTyped";
+import React from "react";
 
 const LoginForm = () => {
+  const { saveAuth } = React.useContext(AuthContext) as AuthContextType;
+  const navigate = useNavigate();
+
   const {
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<LoginInput>();
-  const navigate = useNavigate();
   const [error, setError] = useState<string>();
 
   const onSubmit: SubmitHandler<LoginInput> = async (
     credentials: LoginInput
   ) => {
     await login(credentials).then((res) => {
-      console.log(res);
       if (res === undefined) {
         setError("Incorrect Credentials. Try again");
-      } else {
-        const token = res.token;
-        localStorage.setItem("token", token);
-        setAuthToken(token);
-        navigate("/");
       }
+      let newAuth: iAuth = {
+        id: res.id,
+        username: res.username,
+        roles: res.roles,
+        accessToken: res.accessToken,
+        refreshToken: res.refreshToken,
+      };
+      console.log(newAuth);
+
+      saveAuth(newAuth);
+      navigate("/", { replace: true });
     });
   };
   return (
