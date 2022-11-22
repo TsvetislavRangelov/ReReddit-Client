@@ -35,7 +35,6 @@ const LoginForm = () => {
         accessToken: res.accessToken,
         refreshToken: res.refreshToken,
       };
-      console.log(newAuth);
 
       saveAuth(newAuth);
       navigate("/", { replace: true });
