@@ -19,7 +19,8 @@ function App() {
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/Login" element={<Login></Login>} />
         <Route path="/submit" element={<CreatePostPage></CreatePostPage>} />
-        <Route path="/Profile" element={<ProfilePage></ProfilePage>}></Route>
+        <Route path="/user/:id" element={<ProfilePage></ProfilePage>}></Route>
+        <Route path="/"></Route>
       </Routes>
     </>
   );

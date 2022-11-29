@@ -1,4 +1,6 @@
+import LoggedInUser from "../../api/types/LoggedInUser";
+
 type ProfileCardProps = {
-    id: number;
+    user: LoggedInUser;
 }
 export default ProfileCardProps;

@@ -48,6 +48,7 @@ const LoginForm = () => {
         alignItems: "center",
         height: "100vh",
       }}
+      className="border-2"
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <IncorrectCredentials message={error}></IncorrectCredentials>

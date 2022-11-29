@@ -65,7 +65,7 @@ const NavBar = () => {
                 </NavLink>
                 <NavLink
                   className="text-xl no-underline text-white ml-4"
-                  to="Profile"
+                  to={`/user/${auth.id}`}
                 >
                   Profile
                 </NavLink>

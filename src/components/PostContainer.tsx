@@ -3,7 +3,10 @@ import { Post } from "../api/types/Post";
 
 const PostContainer = (props: Post) => {
   return (
-    <div key={props.id} className="border-2 mt-2 items-center flex text-left">
+    <div
+      key={props.id}
+      className="border-2 mt-2 items-center flex text-left bg-gray-900"
+    >
       <div className="flex flex-column">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -44,7 +47,12 @@ const PostContainer = (props: Post) => {
           >
             <h2>{props.header}</h2>
           </NavLink>
-          <h5 className="mr-4">{"Posted by " + props.author.username}</h5>
+          <NavLink
+            to={`/user/${props.author.id}`}
+            className="no-underline text-gray-200"
+          >
+            <h5 className="mr-4">Posted by {props.author.username}</h5>
+          </NavLink>
         </div>
         <p>{props.body}</p>
       </div>

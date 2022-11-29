@@ -3,10 +3,7 @@ import ReactDOM from "react-dom/client";
 import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
-import NavBar from "./components/NavBar";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Register from "./pages/Register";
-import { Nav } from "react-bootstrap";
+import { BrowserRouter } from "react-router-dom";
 import AuthProvider from "./context/AuthProvider";
 
 const root = ReactDOM.createRoot(
