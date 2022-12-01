@@ -34,23 +34,17 @@ const Profile = () => {
   useEffect(() => {
     getUser(parsedId, axiosPrivate)
       .then((res) => {
-        setFoundUser(res);
+        if (res) {
+          setFoundUser(res);
+          getPostsByUserId(res.id).then((postRes) => {
+            setPosts(postRes);
+          });
+        }
       })
       .finally(() => {
         setLoading(false);
       });
-  }, []);
-
-  //solve this shit later
-  // useEffect(() => {
-  //   getPostsByUserId(foundUser!.id)
-  //     .then((res) => {
-  //       setPosts(res);
-  //     })
-  //     .finally(() => {
-  //       setLoading(false);
-  //     });
-  // }, [foundUser!.id]);
+  }, [parsedId]);
 
   if (isNaN(parsedId)) {
     return <h1>INVALID QUERY PARAMS</h1>;

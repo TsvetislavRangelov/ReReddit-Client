@@ -1,16 +1,8 @@
-import { AxiosInstance } from "axios";
 import React from "react";
-import { useEffect, useState } from "react";
 import { Button, Card, ListGroup } from "react-bootstrap";
-import { NavLink } from "react-router-dom";
 import { AuthContextType } from "../api/types/AuthTyped";
-import LoggedInUser from "../api/types/LoggedInUser";
-import { getUser } from "../api/UserAPI";
 import { AuthContext } from "../context/AuthProvider";
-import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
-import useRefresh from "../custom-hooks/useRefresh";
 import ProfileCardProps from "./props/ProfileCardProps";
-import ServerError from "./ServerError";
 
 const ProfileCard = (props: ProfileCardProps) => {
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
@@ -31,12 +23,12 @@ const ProfileCard = (props: ProfileCardProps) => {
             {props.user.email}
           </ListGroup.Item>
           <ListGroup.Item className="bg-dark text-white">
-            Role: {props.user.roles}
+            Registered at : Placeholder Date
           </ListGroup.Item>
         </ListGroup>
         <Card.Body>
           {props.user.id !== auth.id ? (
-            <Button variant="primary">Add Friend</Button>
+            <Button variant="primary">Message</Button>
           ) : (
             <Button variant="primary">Edit Details</Button>
           )}
