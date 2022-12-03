@@ -16,6 +16,8 @@ import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
 import { WebSocketConfig } from "../utils/WebSocketConfig";
+import { connectClient, disconnectClient } from "../websocket/stompClient";
+import { publishMessage } from "../websocket/webSocketPublish";
 
 const Profile = () => {
   const params = useParams<UserQueryParams>();
@@ -26,8 +28,7 @@ const Profile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const parsedId = Number(params.id);
   const refresh = useRefresh();
-  const [connected, setConnected] = useState();
-  const client = WebSocketConfig();
+  const client = WebSocketConfig(auth.username);
   const axiosPrivate = useAxiosPrivate(
     refresh,
     auth,
@@ -48,36 +49,6 @@ const Profile = () => {
         setLoading(false);
       });
   }, [parsedId]);
-
-  client.onConnect = (frame) => {
-    // Do something, all subscribes must be done is this callback
-    // This is needed because this will be executed after a (re)connect
-    client.subscribe("/topic/messages", (message) => {
-      // called when the client receives a STOMP message from the server
-      if (message.body) {
-        alert("got message with body " + message.body);
-      } else {
-        alert("got empty message");
-      }
-    });
-  };
-  client.onStompError = function (frame) {
-    // Will be invoked in case of error encountered at Broker
-    // Bad login/passcode typically will cause an error
-    // Complaint brokers will set message header with a brief message. Body may contain details.
-    // Compliant brokers will terminate the connection after any error
-    console.log("Broker reported error: " + frame.headers["message"]);
-    console.log("Additional details: " + frame.body);
-    client.unsubscribe("/topic/messages");
-  };
-
-  useEffect(() => {
-    client.activate();
-
-    return () => {
-      client.deactivate();
-    };
-  }, []);
 
   if (isNaN(parsedId)) {
     return <h1>INVALID QUERY PARAMS</h1>;
@@ -112,7 +83,12 @@ const Profile = () => {
   return (
     <div className="flex flex-row justify-center">
       <div>
-        <ProfileCard user={foundUser!}></ProfileCard>
+        <ProfileCard
+          user={foundUser!}
+          onConnect={connectClient}
+          onDisconnect={disconnectClient}
+          client={client}
+        ></ProfileCard>
       </div>
       <div>
         {posts ? (
@@ -125,7 +101,17 @@ const Profile = () => {
           <ServerError message="no posts were found for this user"></ServerError>
         )}
       </div>
-      <button></button>
+      <button
+        onClick={() => {
+          publishMessage(
+            client,
+            `/user/${foundUser.username}/queue/messages`,
+            "wassup modafukas"
+          );
+        }}
+      >
+        CLICK ME
+      </button>
     </div>
   );
 };
