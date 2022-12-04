@@ -5,18 +5,13 @@ import { AuthContext } from "../context/AuthProvider";
 import { receive } from "../websocket/stompClient";
 import ProfileCardProps from "./props/ProfileCardProps";
 
-const ProfileCard = ({
-  user,
-  onConnect,
-  onDisconnect,
-  client,
-}: ProfileCardProps) => {
+const ProfileCard = ({ user, onConnect, onDisconnect }: ProfileCardProps) => {
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [connected, setConnected] = useState<boolean>(false);
 
   const configureInbox = () => {
     if (user.id === auth.id) {
-      receive(client, auth.username);
+      receive(auth.username);
     }
   };
 
@@ -49,7 +44,7 @@ const ProfileCard = ({
               <Button
                 variant="primary"
                 onClick={() => {
-                  onConnect(client, user.username);
+                  onConnect(user.username);
                   setConnected(true);
                 }}
                 disabled={connected}
@@ -59,7 +54,7 @@ const ProfileCard = ({
               <Button
                 disabled={!connected}
                 onClick={() => {
-                  onDisconnect(client, user.username);
+                  onDisconnect(user.username);
                   setConnected(false);
                 }}
               >

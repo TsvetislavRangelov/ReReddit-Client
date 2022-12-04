@@ -15,9 +15,11 @@ import ServerError from "../components/ServerError";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
-import { WebSocketConfig } from "../utils/WebSocketConfig";
-import { connectClient, disconnectClient } from "../websocket/stompClient";
-import { publishMessage } from "../websocket/webSocketPublish";
+import {
+  connectClient,
+  disconnectClient,
+  publishMessage,
+} from "../websocket/stompClient";
 
 const Profile = () => {
   const params = useParams<UserQueryParams>();
@@ -28,7 +30,6 @@ const Profile = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const parsedId = Number(params.id);
   const refresh = useRefresh();
-  const client = WebSocketConfig(auth.username);
   const axiosPrivate = useAxiosPrivate(
     refresh,
     auth,
@@ -87,7 +88,6 @@ const Profile = () => {
           user={foundUser!}
           onConnect={connectClient}
           onDisconnect={disconnectClient}
-          client={client}
         ></ProfileCard>
       </div>
       <div>
@@ -101,17 +101,23 @@ const Profile = () => {
           <ServerError message="no posts were found for this user"></ServerError>
         )}
       </div>
-      <button
-        onClick={() => {
-          publishMessage(
-            client,
-            `/user/${foundUser.username}/queue/messages`,
-            "wassup modafukas"
-          );
-        }}
-      >
-        CLICK ME
-      </button>
+      {auth.id === foundUser.id ? (
+        <></>
+      ) : (
+        <button
+          onClick={() => {
+            publishMessage(
+              auth.username,
+              foundUser.username,
+              `/user/${foundUser.username}/queue/messages`,
+              "YOOOO WHATS POPPIN"
+            );
+          }}
+        >
+          {" "}
+          CLICK ME{" "}
+        </button>
+      )}
     </div>
   );
 };

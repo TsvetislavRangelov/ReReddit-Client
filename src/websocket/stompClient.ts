@@ -1,6 +1,9 @@
-import { Client } from "@stomp/stompjs";
+import {v4 as uuidv4} from 'uuid';
+import { WebSocketConfig } from "../utils/WebSocketConfig";
 
-export const connectClient = (client: Client, receiver: string): any => {
+const client = WebSocketConfig('user');
+
+export const connectClient = (): any => {
     client.onConnect = (frame) => {
     client.subscribe(`/topic/messages`, (message) => {
       if (message.body) {
@@ -10,7 +13,7 @@ export const connectClient = (client: Client, receiver: string): any => {
       }
     });
   };
-  client.onStompError = function (frame) {
+  client.onStompError = function (frame): void {
     console.log("Broker reported error: " + frame.headers["message"]);
     console.log("Additional details: " + frame.body);
     client.unsubscribe(`/topic/messages`);
@@ -19,15 +22,16 @@ export const connectClient = (client: Client, receiver: string): any => {
 
 }
 
-export const disconnectClient = async (client: Client, receiver: string) : Promise<void> => {
+export const disconnectClient = async () : Promise<void> => {
   await client.deactivate();
 }
 
+//return an error once heartbeat timer stops receiving responses, usually on socket deactivation
 export const verifyHeartbeat = (): boolean => {
   return false;
 }
 
-export const receive = (client: Client, source: string) => {
+export const receive = (source: string): void => {
      client.onConnect = (frame) => {
     client.subscribe(`/user/${source}/queue/messages`, (message) => {
       if (message.body) {
@@ -43,4 +47,10 @@ export const receive = (client: Client, source: string) => {
     client.unsubscribe(`/user/${source}/queue/messages`);
   };
   client.activate();
+}
+
+export const publishMessage = (sender: string, receiver: string, destination: string, body: string): void => {
+    const payload = {'id': uuidv4(), 'from': sender, 'receiver': receiver, 'body': body};
+    client.publish({destination: destination, body: JSON.stringify(payload)});
+
 }
