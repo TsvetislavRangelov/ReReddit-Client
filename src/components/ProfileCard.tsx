@@ -1,23 +1,12 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Button, Card, ListGroup } from "react-bootstrap";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { AuthContext } from "../context/AuthProvider";
-import { receive } from "../websocket/stompClient";
 import ProfileCardProps from "./props/ProfileCardProps";
 
-const ProfileCard = ({ user, onConnect, onDisconnect }: ProfileCardProps) => {
+const ProfileCard = ({ user, send }: ProfileCardProps) => {
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [connected, setConnected] = useState<boolean>(false);
-
-  const configureInbox = () => {
-    if (user.id === auth.id) {
-      receive(auth.username);
-    }
-  };
-
-  useEffect(() => {
-    configureInbox();
-  }, []);
 
   return (
     <div className="flex flex-col justify-center items-center mt-2 ml-2">
@@ -42,23 +31,17 @@ const ProfileCard = ({ user, onConnect, onDisconnect }: ProfileCardProps) => {
           {user.id !== auth.id ? (
             <>
               <Button
-                variant="primary"
-                onClick={() => {
-                  onConnect(user.username);
-                  setConnected(true);
-                }}
                 disabled={connected}
+                onClick={() => {
+                  send(
+                    auth.username,
+                    user.username,
+                    `/user/${user.username}/queue/messages`,
+                    "YOOOO WHATS POPPIN"
+                  );
+                }}
               >
                 Message
-              </Button>
-              <Button
-                disabled={!connected}
-                onClick={() => {
-                  onDisconnect(user.username);
-                  setConnected(false);
-                }}
-              >
-                Disconnect
               </Button>
             </>
           ) : (

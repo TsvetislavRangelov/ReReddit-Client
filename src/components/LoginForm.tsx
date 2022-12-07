@@ -8,6 +8,7 @@ import { useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { AuthContextType, iAuth } from "../api/types/AuthTyped";
 import React from "react";
+import { connectClient, receive } from "../websocket/stompClient";
 
 const LoginForm = () => {
   const { saveAuth } = React.useContext(AuthContext) as AuthContextType;
@@ -37,6 +38,7 @@ const LoginForm = () => {
       };
 
       saveAuth(newAuth);
+      receive(newAuth.username);
       navigate("/", { replace: true });
     });
   };

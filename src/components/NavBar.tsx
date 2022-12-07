@@ -4,6 +4,7 @@ import Container from "react-bootstrap/Container";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { AuthContext } from "../context/AuthProvider";
+import { disconnectClient } from "../websocket/stompClient";
 
 const NavBar = () => {
   const navigate = useNavigate();
@@ -16,6 +17,7 @@ const NavBar = () => {
       accessToken: "",
       refreshToken: "",
     });
+    disconnectClient();
     navigate("/Login");
   };
   return (
@@ -68,6 +70,12 @@ const NavBar = () => {
                   to={`/user/${auth.id}`}
                 >
                   Profile
+                </NavLink>
+                <NavLink
+                  className="text-xl no-underline ml-4"
+                  to={`/inbox/${auth.id}`}
+                >
+                  Inbox
                 </NavLink>
               </div>
             )}

@@ -84,11 +84,7 @@ const Profile = () => {
   return (
     <div className="flex flex-row justify-center">
       <div>
-        <ProfileCard
-          user={foundUser!}
-          onConnect={connectClient}
-          onDisconnect={disconnectClient}
-        ></ProfileCard>
+        <ProfileCard user={foundUser!} send={publishMessage}></ProfileCard>
       </div>
       <div>
         {posts ? (
@@ -101,23 +97,6 @@ const Profile = () => {
           <ServerError message="no posts were found for this user"></ServerError>
         )}
       </div>
-      {auth.id === foundUser.id ? (
-        <></>
-      ) : (
-        <button
-          onClick={() => {
-            publishMessage(
-              auth.username,
-              foundUser.username,
-              `/user/${foundUser.username}/queue/messages`,
-              "YOOOO WHATS POPPIN"
-            );
-          }}
-        >
-          {" "}
-          CLICK ME{" "}
-        </button>
-      )}
     </div>
   );
 };

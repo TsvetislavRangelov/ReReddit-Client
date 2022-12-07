@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import PostPage from "./pages/PostPage";
 import CreatePostPage from "./pages/CreatePostPage";
 import ProfilePage from "./pages/ProfilePage";
+import InboxPage from "./pages/InboxPage";
 
 function App() {
   return (
@@ -19,7 +20,8 @@ function App() {
         <Route path="/post/:id" element={<PostPage />} />
         <Route path="/Login" element={<Login></Login>} />
         <Route path="/submit" element={<CreatePostPage></CreatePostPage>} />
-        <Route path="/user/:id" element={<ProfilePage></ProfilePage>}></Route>
+        <Route path="/user/:id" element={<ProfilePage></ProfilePage>} />
+        <Route path="/inbox/:id" element={<InboxPage></InboxPage>} />
         <Route path="/"></Route>
       </Routes>
     </>
