@@ -7,9 +7,10 @@ import InboxQueryParams from "../api/params/InboxQueryParams";
 import { AuthContextType } from "../api/types/AuthTyped";
 import LoggedInUser from "../api/types/LoggedInUser";
 import Message from "../api/types/Message";
-import { getUser } from "../api/UserAPI";
+import { getUser, getUsers } from "../api/UserAPI";
 import NotFound404 from "../components/errors/NotFound404";
 import MessageContainer from "../components/MessageContainer";
+import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
@@ -42,7 +43,10 @@ const InboxPage = () => {
   ));
 
   return (
-    <div>
+    <div className="flex flex-col align-center items-center">
+      <div>
+        <UserFilter></UserFilter>
+      </div>
       {messages?.length === 0 ? (
         <h1>No messages yet</h1>
       ) : (

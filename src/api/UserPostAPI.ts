@@ -1,5 +1,3 @@
-import axiosInstance from './AxiosConfig';
-import axios, { AxiosInstance } from 'axios';
 import { Post } from './types/Post';
 import { axiosPrivate } from './AxiosPrivate';
 

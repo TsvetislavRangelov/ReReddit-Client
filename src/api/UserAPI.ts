@@ -46,3 +46,14 @@ export const getUser = async(id: number, axiosPrivate: AxiosInstance): Promise<L
         }
     }
 }
+
+export const getUsers = async (axiosPrivate: AxiosInstance) => {
+    try{
+        return (await axiosPrivate.get('/users')).data.users as LoggedInUser[];
+    }
+    catch(error){
+        if(axios.isAxiosError(error)){
+            console.error(error.message, error.code);
+        }
+    }
+}

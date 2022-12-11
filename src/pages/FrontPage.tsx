@@ -7,6 +7,7 @@ import { getPosts } from "../api/PostAPI";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { Post } from "../api/types/Post";
 import PostContainer from "../components/PostContainer";
+import InfiniteScroll from "react-infinite-scroller";
 
 import ServerError from "../components/ServerError";
 import { AuthContext } from "../context/AuthProvider";
@@ -25,6 +26,7 @@ const FrontPage = () => {
         setLoading(false);
       });
   }, []);
+  const loadFunc = (page: number) => {};
 
   if (loading) {
     return (
@@ -54,6 +56,7 @@ const FrontPage = () => {
       downs={post.downs}
     ></PostContainer>
   ));
+
   return (
     <div className="flex flex-col justify-center items-center">
       {auth.id !== 0 && auth.username !== "" ? (
@@ -63,9 +66,18 @@ const FrontPage = () => {
       ) : (
         <div></div>
       )}
-      <Stack gap={3} className="col-md-6 mx-auto">
+      <InfiniteScroll
+        pageStart={0}
+        loadMore={loadFunc}
+        hasMore={true || false}
+        loader={
+          <div className="loader" key={0}>
+            Loading ...
+          </div>
+        }
+      >
         {postRenderer}
-      </Stack>
+      </InfiniteScroll>
     </div>
   );
 };

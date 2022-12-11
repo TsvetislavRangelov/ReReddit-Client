@@ -3,7 +3,7 @@ import { WebSocketConfig } from "../utils/WebSocketConfig";
 
 const client = WebSocketConfig('user');
 
-export const connectClient = (): any => {
+export const connectClient = (): void => {
     client.onConnect = (frame) => {
     client.subscribe(`/topic/messages`, (message) => {
       if (message.body) {
