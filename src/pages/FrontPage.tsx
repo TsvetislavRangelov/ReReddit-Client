@@ -66,18 +66,22 @@ const FrontPage = () => {
       ) : (
         <div></div>
       )}
-      <InfiniteScroll
+      <Stack gap={3} className="col-md-4 mx-auto">
+        {postRenderer}
+      </Stack>
+
+      {/* <InfiniteScroll
         pageStart={0}
         loadMore={loadFunc}
         hasMore={true || false}
         loader={
           <div className="loader" key={0}>
-            Loading ...
+            <Spinner animation="border" role="status" variant="secondary" />
           </div>
         }
       >
         {postRenderer}
-      </InfiniteScroll>
+      </InfiniteScroll> */}
     </div>
   );
 };

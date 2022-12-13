@@ -1,7 +1,11 @@
 import {v4 as uuidv4} from 'uuid';
 import { WebSocketConfig } from "../utils/WebSocketConfig";
 
-const client = WebSocketConfig('user');
+export const client = WebSocketConfig('user');
+
+export const activate = (): void => {
+  client.activate();
+}
 
 export const connectClient = (): void => {
     client.onConnect = (frame) => {

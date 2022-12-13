@@ -1,23 +1,21 @@
+import { Client, IMessage } from "@stomp/stompjs";
 import { AxiosInstance } from "axios";
 import React, { useEffect } from "react";
 import { useState } from "react";
-import { Spinner } from "react-bootstrap";
 import { Navigate, useLocation, useParams } from "react-router";
 import InboxQueryParams from "../api/params/InboxQueryParams";
 import { AuthContextType } from "../api/types/AuthTyped";
-import LoggedInUser from "../api/types/LoggedInUser";
 import Message from "../api/types/Message";
-import { getUser, getUsers } from "../api/UserAPI";
-import NotFound404 from "../components/errors/NotFound404";
+import ChatMessages from "../components/ChatMessages";
 import MessageContainer from "../components/MessageContainer";
 import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
+import { client } from "../websocket/stompClient";
 
 const InboxPage = () => {
   const params = useParams<InboxQueryParams>();
-  //   const [foundUser, setFoundUser] = useState<LoggedInUser>();
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [messages, setMessages] = useState<Message[]>([]);
   const location = useLocation();
@@ -29,29 +27,40 @@ const InboxPage = () => {
     saveAuth
   ) as AxiosInstance;
 
+  useEffect(() => {
+    client.onConnect = (frame) => {
+      client.subscribe(`/user/${auth.username}/queue/messages`, (message) => {
+        if (message.body) {
+          onMessageReceived(message);
+        } else {
+          alert("no message");
+        }
+      });
+    };
+    client.activate();
+  }, []);
+
+  const onMessageReceived = (data: any) => {
+    console.log("Data: ", data);
+    const message = JSON.parse(data.body);
+    setMessages((messages) => [...messages, message]);
+  };
+
+
   if (!auth?.username) {
     return <Navigate to="/" state={{ from: location }}></Navigate>;
   }
-  const messageRenderer = messages?.map((msg) => (
-    <MessageContainer
-      id={msg.id}
-      key={msg.id}
-      sender={msg.sender}
-      receiver={msg.receiver}
-      body={msg.body}
-    ></MessageContainer>
-  ));
 
   return (
     <div className="flex flex-col align-center items-center">
       <div>
-        <UserFilter></UserFilter>
+        <UserFilter client={client}></UserFilter>
       </div>
       {messages?.length === 0 ? (
         <h1>No messages yet</h1>
       ) : (
         <div>
-          {messageRenderer} - {messages.length}
+          <ChatMessages messages={messages}></ChatMessages>
         </div>
       )}
     </div>

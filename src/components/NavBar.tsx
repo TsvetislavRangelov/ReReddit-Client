@@ -1,6 +1,7 @@
 import React from "react";
-import { Nav, Navbar, Form, Button } from "react-bootstrap";
+import { Nav, Navbar, Form, Button, DropdownButton } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
+import DropdownItem from "react-bootstrap/esm/DropdownItem";
 import { NavLink, useNavigate } from "react-router-dom";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { AuthContext } from "../context/AuthProvider";
@@ -58,25 +59,35 @@ const NavBar = () => {
               </>
             ) : (
               <div>
-                <NavLink
-                  className="text-xl no-underline text-white ml-4"
-                  to="Login"
-                  onClick={logout}
-                >
-                  Log Out
-                </NavLink>
-                <NavLink
-                  className="text-xl no-underline text-white ml-4"
-                  to={`/user/${auth.id}`}
-                >
-                  Profile
-                </NavLink>
-                <NavLink
-                  className="text-xl no-underline ml-4"
-                  to={`/inbox/${auth.id}`}
-                >
-                  Inbox
-                </NavLink>
+                <DropdownButton id="dropdown-basic-button" title="Profile">
+                  <DropdownItem>
+                    <NavLink
+                      className="text-xl no-underline ml-4 text-black"
+                      to={`/inbox/${auth.id}`}
+                    >
+                      Inbox
+                    </NavLink>
+                  </DropdownItem>
+
+                  <DropdownItem>
+                    {" "}
+                    <NavLink
+                      className="text-xl no-underline text-black ml-4"
+                      to={`/user/${auth.id}`}
+                    >
+                      Profile
+                    </NavLink>
+                  </DropdownItem>
+                  <DropdownItem className="text-black">
+                    <NavLink
+                      className="text-xl no-underline text-black ml-4"
+                      to="Login"
+                      onClick={logout}
+                    >
+                      Log Out
+                    </NavLink>
+                  </DropdownItem>
+                </DropdownButton>
               </div>
             )}
           </div>

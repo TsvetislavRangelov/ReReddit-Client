@@ -1,6 +1,7 @@
+import { Client } from "@stomp/stompjs";
 import LoggedInUser from "../../api/types/LoggedInUser";
 
 type UserFilterProps = {
-    users: LoggedInUser[];
+    client: Client;
 }
 export default UserFilterProps;
