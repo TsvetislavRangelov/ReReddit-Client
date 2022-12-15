@@ -29,7 +29,7 @@ export const getPost = async (id: number): Promise<Post | undefined> => {
 export const createPost = async (postData: CreatePostData, axiosPrivate: AxiosInstance): Promise<number | undefined> => {
     try{
         return(await axiosPrivate.post(`/posts`, {
-            author: postData.author,
+            authorId: postData.author.id,
             header: postData.header,
             body: postData.body
         })).data.id as number;

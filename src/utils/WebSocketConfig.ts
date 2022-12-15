@@ -10,7 +10,7 @@ export const WebSocketConfig = (subject: string): Client => {
         debug: (str) => {
             console.log(str);
         },
-        reconnectDelay: 5000,
+        reconnectDelay: 10000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
     });

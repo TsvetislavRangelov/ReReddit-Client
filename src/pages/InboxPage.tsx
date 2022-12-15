@@ -7,7 +7,6 @@ import InboxQueryParams from "../api/params/InboxQueryParams";
 import { AuthContextType } from "../api/types/AuthTyped";
 import Message from "../api/types/Message";
 import ChatMessages from "../components/ChatMessages";
-import MessageContainer from "../components/MessageContainer";
 import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
@@ -19,13 +18,13 @@ const InboxPage = () => {
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [messages, setMessages] = useState<Message[]>([]);
   const location = useLocation();
-  const parsedId = Number(params.id);
-  const refresh = useRefresh();
-  const axiosPrivate = useAxiosPrivate(
-    refresh,
-    auth,
-    saveAuth
-  ) as AxiosInstance;
+  // const parsedId = Number(params.id);
+  // const refresh = useRefresh();
+  // const axiosPrivate = useAxiosPrivate(
+  //   refresh,
+  //   auth,
+  //   saveAuth
+  // ) as AxiosInstance;
 
   useEffect(() => {
     client.onConnect = (frame) => {

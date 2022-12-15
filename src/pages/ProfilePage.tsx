@@ -16,8 +16,6 @@ import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
 import {
-  connectClient,
-  disconnectClient,
   publishMessage,
 } from "../websocket/stompClient";
 

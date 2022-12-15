@@ -7,7 +7,7 @@ export const createComment = async (commentData: CreateCommentData): Promise<voi
         console.log(commentData.author);
         console.log(commentData.post);
          (await axiosInstance.post(`/comments`, {
-            author: commentData.author,
+            authorId: commentData.author.id,
             body: commentData.body,
             post: commentData.post
         }));
