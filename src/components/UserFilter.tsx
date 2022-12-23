@@ -14,6 +14,7 @@ const UserFilter = ({ client }: UserFilterProps) => {
   const [users, setUsers] = useState<LoggedInUser[]>();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LoggedInUser[]>();
+  const [buttonText, setButtonText] = useState<string>('Ban');
 
   useEffect(() => {
     getUsers(axiosPrivate).then((res) => {
@@ -71,10 +72,15 @@ const UserFilter = ({ client }: UserFilterProps) => {
                     variant="primary"
                     size="sm"
                     onClick={() => {
-                      sendMessage("please work bro", user.username);
+                      if(buttonText === 'Ban'){
+                        setButtonText('Unban');
+                      }
+                      else{
+                        setButtonText('Ban');
+                      }
                     }}
                   >
-                    Message
+                    {buttonText}
                   </Button>
                 </div>
               );

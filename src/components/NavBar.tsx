@@ -87,6 +87,17 @@ const NavBar = () => {
                       Log Out
                     </NavLink>
                   </DropdownItem>
+                  {auth.roles.includes('ADMIN') ? (
+                    <DropdownItem className="text-black">
+                      <NavLink
+                      to="AdminDashboard" 
+                      className="text-xl no-underline text-black ml-4">
+                        Dashboard
+                      </NavLink>
+                    </DropdownItem>
+                  ) : (
+                    ''
+                  )}
                 </DropdownButton>
               </div>
             )}

@@ -3,10 +3,10 @@ import axios, { AxiosInstance } from 'axios';
 import { Post } from "./types/Post";
 import CreatePostData from "./types/CreatePostData";
 
-export const getPosts = async (): Promise<Post[]| undefined> => {
+export const getPosts = async (page?: number, size?: number): Promise<Post[]| undefined> => {
 
     try{
-    return (await axiosInstance.get("/posts")).data.posts as Post[];
+    return (await axiosInstance.get("/posts", {params: {page: page, size: size}})).data.data.posts as Post[];
     }
     catch(error){
         if(axios.isAxiosError(error)){

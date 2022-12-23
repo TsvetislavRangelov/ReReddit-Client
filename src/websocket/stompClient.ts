@@ -35,7 +35,12 @@ export const verifyHeartbeat = (): boolean => {
   return false;
 }
 
-export const receive = (source: string): void => {
+export const receive = async (source: string): Promise<void> => {
+      if(source === ""){
+        client.unsubscribe(`/user/${source}/queue/messages`)
+        await client.deactivate();
+        return;
+      }
      client.onConnect = (frame) => {
     client.subscribe(`/user/${source}/queue/messages`, (message) => {
       if (message.body) {
@@ -53,8 +58,8 @@ export const receive = (source: string): void => {
   client.activate();
 }
 
-export const publishMessage = (sender: string, receiver: string, destination: string, body: string): void => {
-    const payload = {'id': uuidv4(), 'from': sender, 'receiver': receiver, 'body': body};
+export const publishMessage = (sender: string, destination: string, body: string): void => {
+    const payload = {'id': uuidv4(), 'from': sender, 'body': body};
     client.publish({destination: destination, body: JSON.stringify(payload)});
 
 }

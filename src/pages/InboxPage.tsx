@@ -28,7 +28,7 @@ const InboxPage = () => {
 
   useEffect(() => {
     client.onConnect = (frame) => {
-      client.subscribe(`/user/${auth.username}/queue/messages`, (message) => {
+      client.subscribe(`/topic/messages`, (message) => {
         if (message.body) {
           onMessageReceived(message);
         } else {
@@ -39,9 +39,9 @@ const InboxPage = () => {
     client.activate();
   }, []);
 
-  const onMessageReceived = (data: any) => {
-    console.log("Data: ", data);
+  const onMessageReceived = (data: IMessage) => {
     const message = JSON.parse(data.body);
+    console.log(message);
     setMessages((messages) => [...messages, message]);
   };
 
@@ -52,9 +52,6 @@ const InboxPage = () => {
 
   return (
     <div className="flex flex-col align-center items-center">
-      <div>
-        <UserFilter client={client}></UserFilter>
-      </div>
       {messages?.length === 0 ? (
         <h1>No messages yet</h1>
       ) : (

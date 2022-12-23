@@ -1,7 +1,6 @@
 type Message = {
     id: string;
-    sender: string;
-    receiver: string;
+    from: string;
     body: string;
 }
 export default Message;

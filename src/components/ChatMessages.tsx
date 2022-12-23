@@ -6,9 +6,8 @@ const ChatMessages = (props: ChatMessagesProps) => {
       <h2>Messages:</h2>
       {props.messages.map((message) => (
         <div key={message.id}>
-          From: {message.sender}
+          From: {message.from} <br />
           Message: {message.body}
-          Receiver: {message.receiver}
         </div>
       ))}
     </>
