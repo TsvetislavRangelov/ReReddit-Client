@@ -7,11 +7,9 @@ import { AuthContextType } from "../api/types/AuthTyped";
 import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
 import { client, publishMessage } from "../websocket/stompClient";
-import { v4 as uuidv4 } from "uuid";
 
 const AdminDashboard = () => {
     const {register, handleSubmit, watch, formState: {errors}} = useForm<AnnouncementInput>();
-    const [announcement, setAnnouncement] = useState<string>();
     const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
     const location = useLocation();
 
@@ -27,9 +25,35 @@ const AdminDashboard = () => {
     }
   
     return (<div className="flex flex-col align-center items-center">
-        <h1>DASHBOARD</h1>
-
+        <h1>Statistics Timeframe</h1>
         <div>
+        <Button className="mr-2" variant="primary" type="button">Today</Button>
+            <Button className="mr-2" variant="primary" type="button">7 days</Button>
+            <Button className="mr-2" variant="primary" type="button">14 days</Button>
+            <Button className="mr-2" variant="primary" type="button">1 month</Button>
+            <Button className="mr-2" variant="primary" type="button">6 months</Button>
+        </div>
+        <div className="flex flex-row mt-6">
+            <div className="mr-2">
+                <h5>New Users 1</h5>
+                
+            </div>
+            <div className="mr-2">
+                <h5>Censors 3</h5>
+                
+            </div>
+            </div>
+            <div className="flex flex-row mt-6">
+            <div className="mr-2">
+                <h5>New Subreddits 4</h5>
+                
+            </div>
+            <div className="mr-2">
+                <h5>Logins 5</h5>
+                
+            </div>
+        </div>
+        <div className="mt-4">
             <h4>Send an announcement to all users</h4>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Control
@@ -47,7 +71,7 @@ const AdminDashboard = () => {
         </div>
         <div  className="mt-4">
         <h1 className="ml-4">User List</h1>
-        <UserFilter client={client}></UserFilter>
+        <UserFilter></UserFilter>
       </div>
     </div>)
     

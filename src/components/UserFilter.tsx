@@ -1,16 +1,11 @@
-import React from "react";
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { axiosPrivate } from "../api/AxiosPrivate";
 import { AuthContextType } from "../api/types/AuthTyped";
 import LoggedInUser from "../api/types/LoggedInUser";
 import { getUsers } from "../api/UserAPI";
-import { AuthContext } from "../context/AuthProvider";
-import { v4 as uuidv4 } from "uuid";
-import UserFilterProps from "./props/UserFilterProps";
 
-const UserFilter = ({ client }: UserFilterProps) => {
-  const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
+const UserFilter = () => {
   const [users, setUsers] = useState<LoggedInUser[]>();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LoggedInUser[]>();
@@ -21,20 +16,6 @@ const UserFilter = ({ client }: UserFilterProps) => {
       setUsers(res);
     });
   }, []);
-
-  const sendMessage = (message: string, receiver: string) => {
-    const payload = {
-      id: uuidv4(),
-      sender: auth.username,
-      receiver: receiver,
-      body: message,
-    };
-    console.log(payload);
-    client.publish({
-      destination: `/user/${receiver}/queue/messages`,
-      body: JSON.stringify(payload),
-    });
-  };
 
   const handleChange = (e: any) => {
     setQuery(e.target.value);
