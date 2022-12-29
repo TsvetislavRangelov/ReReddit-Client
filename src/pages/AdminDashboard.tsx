@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { useNavigate, useLocation, Navigate } from "react-router";
@@ -8,13 +8,31 @@ import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
 import { client, publishMessage } from "../websocket/stompClient";
 import DatePicker from "react-date-picker";
+import { AxiosInstance } from "axios";
+import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
+import useRefresh from "../custom-hooks/useRefresh";
+import { getActivityLogCount } from "../api/ActivityLogAPI";
 
 
 const AdminDashboard = () => {
     const {register, handleSubmit, watch, formState: {errors}} = useForm<AnnouncementInput>();
     const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
     const [date, setDate] = useState(new Date());
+    const [logTotal, setLogTotal] = useState<number>();
     const location = useLocation();
+    const refresh = useRefresh();
+    const axiosPrivate = useAxiosPrivate(
+      refresh,
+      auth,
+      saveAuth
+    ) as AxiosInstance;
+
+    useEffect(() => {
+        getActivityLogCount(axiosPrivate).then((res) => {
+            console.log(res);
+            setLogTotal(res);
+        })
+    }, [])
 
     if(!auth.username || !auth.roles.includes("ADMIN")){
         return <Navigate to="/Login" state={{ from: location }} />;
@@ -26,8 +44,6 @@ const AdminDashboard = () => {
         }
         publishMessage(auth.username, '/topic/messages', body.body);
     }
-
-    
   
     return (<div className="flex flex-col align-center items-center">
         <h1 className=" text-white">Statistics Timeframe</h1>
@@ -35,7 +51,11 @@ const AdminDashboard = () => {
         <Button className="mr-2" variant="primary" type="button">Today</Button>
         <DatePicker className="dtp" onChange={(value: Date) => {
             setDate(value);
-            console.log(date.toLocaleDateString("en-CA"));
+            //console.log(date.toLocaleDateString("en-CA"));
+            getActivityLogCount(axiosPrivate, value.toLocaleDateString("en-CA")).then((res) => {
+                console.log(res);
+                setLogTotal(res.count);
+            })
         }} value={date} format="y-MM-dd"></DatePicker>
         </div>
         <div className="flex flex-row mt-6">
@@ -53,7 +73,7 @@ const AdminDashboard = () => {
                 
             </div>
             <div className="mr-2  text-white">
-                <h5>Logins 5</h5>
+                <h5>Logins {logTotal}</h5>
                 
             </div>
         </div>

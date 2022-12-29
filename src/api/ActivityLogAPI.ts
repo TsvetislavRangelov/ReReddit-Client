@@ -15,6 +15,17 @@ export const registerActivityLog = async (logData: CreateLogData): Promise<void>
     }
 }
 
-export const getActivityLogCount = async () => {
+export const getActivityLogCount = async (axiosPrivate: AxiosInstance, date?: string) => {
+    try{
+        if(date){
+            return (await axiosPrivate.get(`/logs/count?date=${date}`)).data
+        }
+        else{
+            return (await axiosPrivate.get('/logs')).data;
+        }
+    }
+    catch(err){
+        console.error(err);
+    }
     
 }
