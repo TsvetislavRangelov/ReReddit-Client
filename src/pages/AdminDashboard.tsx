@@ -7,10 +7,13 @@ import { AuthContextType } from "../api/types/AuthTyped";
 import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
 import { client, publishMessage } from "../websocket/stompClient";
+import DatePicker from "react-date-picker";
+
 
 const AdminDashboard = () => {
     const {register, handleSubmit, watch, formState: {errors}} = useForm<AnnouncementInput>();
     const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
+    const [date, setDate] = useState(new Date());
     const location = useLocation();
 
     if(!auth.username || !auth.roles.includes("ADMIN")){
@@ -23,37 +26,38 @@ const AdminDashboard = () => {
         }
         publishMessage(auth.username, '/topic/messages', body.body);
     }
+
+    
   
     return (<div className="flex flex-col align-center items-center">
-        <h1>Statistics Timeframe</h1>
+        <h1 className=" text-white">Statistics Timeframe</h1>
         <div>
         <Button className="mr-2" variant="primary" type="button">Today</Button>
-            <Button className="mr-2" variant="primary" type="button">7 days</Button>
-            <Button className="mr-2" variant="primary" type="button">14 days</Button>
-            <Button className="mr-2" variant="primary" type="button">1 month</Button>
-            <Button className="mr-2" variant="primary" type="button">6 months</Button>
+        <DatePicker className="dtp" onChange={(value: Date) => {
+            setDate(value);
+            console.log(date.toLocaleDateString("en-CA"));
+        }} value={date} format="y-MM-dd"></DatePicker>
         </div>
         <div className="flex flex-row mt-6">
-            <div className="mr-2">
+            <div className="mr-2  text-white">
                 <h5>New Users 1</h5>
                 
             </div>
-            <div className="mr-2">
+            <div className="mr-2  text-white">
                 <h5>Censors 3</h5>
-                
             </div>
             </div>
-            <div className="flex flex-row mt-6">
-            <div className="mr-2">
+            <div className="flex flex-row mt-6  text-white">
+            <div className="mr-2 text-white">
                 <h5>New Subreddits 4</h5>
                 
             </div>
-            <div className="mr-2">
+            <div className="mr-2  text-white">
                 <h5>Logins 5</h5>
                 
             </div>
         </div>
-        <div className="mt-4">
+        <div className="mt-4  text-white">
             <h4>Send an announcement to all users</h4>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Control
@@ -69,7 +73,7 @@ const AdminDashboard = () => {
                 </Button>
             </Form>
         </div>
-        <div  className="mt-4">
+        <div  className="mt-4  text-white">
         <h1 className="ml-4">User List</h1>
         <UserFilter></UserFilter>
       </div>

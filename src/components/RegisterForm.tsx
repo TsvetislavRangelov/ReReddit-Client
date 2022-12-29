@@ -33,7 +33,8 @@ const RegistrationForm = () => {
         justifyContent: 'center',
         alignItems: 'center',
         height: '100vh',
-        }}>
+        }}
+        className=" text-white">
             
        <Form onSubmit={handleSubmit(onSubmit)}>
         <IncorrectCredentials message={error}></IncorrectCredentials>

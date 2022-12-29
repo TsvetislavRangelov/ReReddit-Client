@@ -8,7 +8,8 @@ import { useState } from "react";
 import { AuthContext } from "../context/AuthProvider";
 import { AuthContextType, iAuth } from "../api/types/AuthTyped";
 import React from "react";
-import { activate, connectClient, receive } from "../websocket/stompClient";
+import { registerActivityLog } from "../api/ActivityLogAPI";
+import CreateLogData from "../api/types/CreateLogData";
 
 const LoginForm = () => {
   const { saveAuth } = React.useContext(AuthContext) as AuthContextType;
@@ -27,6 +28,11 @@ const LoginForm = () => {
   ) => {
     await login(credentials).then((res) => {
       if (res === undefined) {
+        const logDataFail: CreateLogData = {
+          success: false,
+          profile: credentials.email
+        }
+        registerActivityLog(logDataFail);
         setError("Incorrect Credentials. Try again");
       }
       let newAuth: iAuth = {
@@ -38,6 +44,11 @@ const LoginForm = () => {
       };
 
       saveAuth(newAuth);
+      const logDataSuccess: CreateLogData = {
+        success: true,
+        profile: credentials.email
+      }
+      registerActivityLog(logDataSuccess);
       navigate("/", { replace: true });
     });
   };
@@ -49,7 +60,7 @@ const LoginForm = () => {
         alignItems: "center",
         height: "100vh",
       }}
-      className="border-2"
+      className="border-2  text-white"
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <IncorrectCredentials message={error}></IncorrectCredentials>

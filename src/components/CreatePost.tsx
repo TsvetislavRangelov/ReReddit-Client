@@ -46,10 +46,10 @@ const CreatePost = () => {
   };
 
   if (!auth?.username) {
-    return <Navigate to="/" state={{ from: location }} />;
+    return <Navigate to="/" state={{ from: location }} />
   }
   return (
-    <div className="flex flex-col justify-between items-center w-50 mt-10 bg-gray-900">
+    <div className="flex flex-col justify-between items-center w-50 mt-10 bg-gray-900 text-white">
       <div className="flex flex-row justify-around border-b-2 w-100 items-center object-contain place-content-center bg-gray-900">
         <button className="flex align-center hover:border-b-2 text-xl grow border-r-2">
           <svg

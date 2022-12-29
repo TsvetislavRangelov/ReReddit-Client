@@ -5,7 +5,7 @@ const PostContainer = (props: Post) => {
   return (
     <div
       key={props.id}
-      className="border-2 mt-2 items-center flex text-left bg-gray-900"
+      className="border-2 mt-2 items-center flex text-left bg-gray-900  text-white"
     >
       <div className="flex flex-column">
         <svg

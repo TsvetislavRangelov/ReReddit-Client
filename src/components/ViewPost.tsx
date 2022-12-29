@@ -32,9 +32,9 @@ const ViewPost = (props: ViewPostProps) => {
   ));
 
   return (
-    <div className="w-50 bg-gray-800 min-h-fit">
-      <div className="ml-4 flex flex-col border-1">
-        <div className="flex flex-row">
+    <div className="w-50 bg-gray-800 min-h-fit  text-white">
+      <div className="ml-4 flex flex-col border-1  text-white">
+        <div className="flex flex-row  text-white">
           <button className="hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -42,7 +42,7 @@ const ViewPost = (props: ViewPostProps) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-8 h-8"
+              className="w-8 h-8  text-white"
             >
               <path
                 strokeLinecap="round"
@@ -62,7 +62,7 @@ const ViewPost = (props: ViewPostProps) => {
               viewBox="0 0 24 24"
               strokeWidth={1.5}
               stroke="currentColor"
-              className="w-8 h-8"
+              className="w-8 h-8  text-white"
             >
               <path
                 strokeLinecap="round"
