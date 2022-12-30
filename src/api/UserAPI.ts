@@ -57,3 +57,17 @@ export const getUsers = async (axiosPrivate: AxiosInstance) => {
         }
     }
 }
+
+export const countNewUsersForDay = async (axiosPrivate: AxiosInstance, date?: string) => {
+    try{
+        if(date){
+            return (await axiosPrivate.get(`/users/count?date=${date}`)).data;
+        }
+        else{
+            return (await axiosPrivate.get('/users/count/total')).data;
+        }
+    }
+    catch(err){
+        console.error(err);
+    }
+}

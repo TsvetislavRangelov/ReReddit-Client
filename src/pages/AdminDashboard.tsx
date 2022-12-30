@@ -12,6 +12,7 @@ import { AxiosInstance } from "axios";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
 import { getActivityLogCount } from "../api/ActivityLogAPI";
+import { countNewUsersForDay } from "../api/UserAPI";
 
 
 const AdminDashboard = () => {
@@ -19,6 +20,7 @@ const AdminDashboard = () => {
     const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
     const [date, setDate] = useState(new Date());
     const [logTotal, setLogTotal] = useState<number>();
+    const [userTotal, setUserTotal] = useState<number>();
     const location = useLocation();
     const refresh = useRefresh();
     const axiosPrivate = useAxiosPrivate(
@@ -29,9 +31,11 @@ const AdminDashboard = () => {
 
     useEffect(() => {
         getActivityLogCount(axiosPrivate).then((res) => {
-            console.log(res);
             setLogTotal(res);
         })
+        countNewUsersForDay(axiosPrivate).then((res) => {
+            setUserTotal(res);
+        }) 
     }, [])
 
     if(!auth.username || !auth.roles.includes("ADMIN")){
@@ -48,19 +52,38 @@ const AdminDashboard = () => {
     return (<div className="flex flex-col align-center items-center">
         <h1 className=" text-white">Statistics Timeframe</h1>
         <div>
-        <Button className="mr-2" variant="primary" type="button">Today</Button>
-        <DatePicker className="dtp" onChange={(value: Date) => {
-            setDate(value);
-            //console.log(date.toLocaleDateString("en-CA"));
-            getActivityLogCount(axiosPrivate, value.toLocaleDateString("en-CA")).then((res) => {
-                console.log(res);
-                setLogTotal(res.count);
+        <Button className="mr-2" variant="primary" type="button" onClick={() => {
+            getActivityLogCount(axiosPrivate).then((res) => {
+                setLogTotal(res);
             })
+            countNewUsersForDay(axiosPrivate).then((res) => {
+                setUserTotal(res);
+            })
+        }}>Total</Button>
+        <DatePicker className="dtp" onChange={(value: Date) => {
+            try{
+                setDate(value);
+                getActivityLogCount(axiosPrivate, value.toLocaleDateString("en-CA")).then((res) => {
+                    console.log(res);
+                    if(res.count){
+                        setLogTotal(res.count);
+                    }
+                    else{
+                        setLogTotal(res);
+                    }
+                })
+                countNewUsersForDay(axiosPrivate, value.toLocaleDateString("en-CA")).then((res) => {
+                    setUserTotal(res);
+                })
+            }
+            catch(err){
+                console.error(err)
+            }
         }} value={date} format="y-MM-dd"></DatePicker>
         </div>
         <div className="flex flex-row mt-6">
             <div className="mr-2  text-white">
-                <h5>New Users 1</h5>
+                <h5>New Users {userTotal}</h5>
                 
             </div>
             <div className="mr-2  text-white">
@@ -69,7 +92,7 @@ const AdminDashboard = () => {
             </div>
             <div className="flex flex-row mt-6  text-white">
             <div className="mr-2 text-white">
-                <h5>New Subreddits 4</h5>
+                <h5>Posts 23</h5>
                 
             </div>
             <div className="mr-2  text-white">
