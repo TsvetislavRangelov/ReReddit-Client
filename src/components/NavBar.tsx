@@ -1,13 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import { Nav, Navbar, Form, Button, DropdownButton } from "react-bootstrap";
 import Container from "react-bootstrap/Container";
 import DropdownItem from "react-bootstrap/esm/DropdownItem";
-import { NavLink, useNavigate } from "react-router-dom";
+import { NavLink, redirect, useNavigate } from "react-router-dom";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { AuthContext } from "../context/AuthProvider";
 import { disconnectClient } from "../websocket/stompClient";
 
 const NavBar = () => {
+  const [searchTerm, setSearchTerm] = useState<string>("");
   const navigate = useNavigate();
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const logout = async () => {
@@ -21,6 +22,10 @@ const NavBar = () => {
     disconnectClient();
     navigate("/Login");
   };
+
+  const handleChange = (e: any) => {
+    setSearchTerm(e.target.value);
+  }
   return (
     <Navbar bg="dark" expand="lg">
       <Container>
@@ -34,11 +39,17 @@ const NavBar = () => {
         <Form className="d-flex">
           <Form.Control
             type="search"
-            placeholder="Search"
+            placeholder="Search Posts"
             className="me-2"
             aria-label="Search"
+            value={searchTerm}
+            onChange={handleChange}
           />
-          <Button variant="outline-success">Search</Button>
+          <Button variant="outline-success" onClick={() => {
+            if(searchTerm !== ""){
+              navigate(`/search/${searchTerm}`)
+            }
+          }}>Search</Button>
         </Form>
         <Nav.Item>
           <div className="d-flex pl-4 justify-between">

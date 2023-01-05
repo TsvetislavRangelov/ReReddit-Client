@@ -10,6 +10,7 @@ import CreatePostPage from "./pages/CreatePostPage";
 import ProfilePage from "./pages/ProfilePage";
 import InboxPage from "./pages/InboxPage";
 import AdminDashboard from "./pages/AdminDashboard";
+import PostSearchResults from "./pages/PostSearchResults";
 
 function App() {
   return (
@@ -24,6 +25,7 @@ function App() {
         <Route path="/user/:id" element={<ProfilePage></ProfilePage>} />
         <Route path="/inbox/:id" element={<InboxPage></InboxPage>} />
         <Route path="/AdminDashboard" element={<AdminDashboard></AdminDashboard>}></Route>
+        <Route path="/search/:title" element={<PostSearchResults></PostSearchResults>}></Route>
         <Route path="/"></Route>
       </Routes>
     </>
