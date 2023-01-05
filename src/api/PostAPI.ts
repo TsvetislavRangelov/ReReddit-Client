@@ -6,7 +6,7 @@ import CreatePostData from "./types/CreatePostData";
 export const getPosts = async (page?: number, size?: number): Promise<Post[]| undefined> => {
 
     try{
-    return (await axiosInstance.get("/posts", {params: {page: page, size: size}})).data.data.posts as Post[];
+    return (await axiosInstance.get("/posts", {params: {page: page, size: size}})).data.posts as Post[];
     }
     catch(error){
         if(axios.isAxiosError(error)){
@@ -39,4 +39,19 @@ export const createPost = async (postData: CreatePostData, axiosPrivate: AxiosIn
             console.error(error.message);
         }
     }
+}
+
+export const getPostCount = async (axiosPrivate: AxiosInstance, date?: string): Promise<number | undefined> => {
+    try{
+        if(date){
+            return (await axiosPrivate.get(`/posts/count?date=${date}`)).data;
+        }
+        else{
+            return (await axiosPrivate.get('/posts/total')).data;
+        }
+    }
+    catch(err){
+        console.error(err);
+    }
+    
 }

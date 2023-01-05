@@ -13,6 +13,7 @@ import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
 import { getActivityLogCount } from "../api/ActivityLogAPI";
 import { countNewUsersForDay } from "../api/UserAPI";
+import { getPost, getPostCount } from "../api/PostAPI";
 
 
 const AdminDashboard = () => {
@@ -21,6 +22,7 @@ const AdminDashboard = () => {
     const [date, setDate] = useState(new Date());
     const [logTotal, setLogTotal] = useState<number>();
     const [userTotal, setUserTotal] = useState<number>();
+    const [postTotal, setPostTotal] = useState<number>();
     const location = useLocation();
     const refresh = useRefresh();
     const axiosPrivate = useAxiosPrivate(
@@ -35,7 +37,10 @@ const AdminDashboard = () => {
         })
         countNewUsersForDay(axiosPrivate).then((res) => {
             setUserTotal(res);
-        }) 
+        })
+        getPostCount(axiosPrivate).then((res) => {
+            setPostTotal(res);
+        })
     }, [])
 
     if(!auth.username || !auth.roles.includes("ADMIN")){
@@ -59,6 +64,9 @@ const AdminDashboard = () => {
             countNewUsersForDay(axiosPrivate).then((res) => {
                 setUserTotal(res);
             })
+            getPostCount(axiosPrivate).then((res) => {
+                setPostTotal(res);
+            })
         }}>Total</Button>
         <DatePicker className="dtp" onChange={(value: Date) => {
             try{
@@ -75,6 +83,9 @@ const AdminDashboard = () => {
                 countNewUsersForDay(axiosPrivate, value.toLocaleDateString("en-CA")).then((res) => {
                     setUserTotal(res);
                 })
+                getPostCount(axiosPrivate, value.toLocaleDateString("en-CA")).then((res) => {
+                    setPostTotal(res);
+                })
             }
             catch(err){
                 console.error(err)
@@ -83,16 +94,13 @@ const AdminDashboard = () => {
         </div>
         <div className="flex flex-row mt-6">
             <div className="mr-2  text-white">
-                <h5>New Users {userTotal}</h5>
+                <h5>Users {userTotal}</h5>
                 
-            </div>
-            <div className="mr-2  text-white">
-                <h5>Censors 3</h5>
             </div>
             </div>
             <div className="flex flex-row mt-6  text-white">
             <div className="mr-2 text-white">
-                <h5>Posts 23</h5>
+                <h5>Posts {postTotal}</h5>
                 
             </div>
             <div className="mr-2  text-white">
