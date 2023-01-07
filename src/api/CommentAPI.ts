@@ -1,15 +1,15 @@
+import { AxiosInstance } from "axios";
 import axiosInstance from "./AxiosConfig";
 import Comment from "./types/Comment";
 import { CreateCommentData } from "./types/CreateCommentData";
 
-export const createComment = async (commentData: CreateCommentData): Promise<void> => {
+export const createComment = async (axiosPrivate: AxiosInstance, commentData: CreateCommentData): Promise<void> => {
     try{
-        console.log(commentData.author);
-        console.log(commentData.post);
-         (await axiosInstance.post(`/comments`, {
-            authorId: commentData.author.id,
+        
+         (await axiosPrivate.post(`/comments`, {
+            authorId: commentData.authorId,
             body: commentData.body,
-            post: commentData.post
+            postId: commentData.postId
         }));
     }
             catch(err){

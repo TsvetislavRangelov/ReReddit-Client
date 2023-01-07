@@ -9,7 +9,6 @@ import PostContainer from "../components/PostContainer";
 const PostSearchResults = () => {
     const [posts, setPosts] = useState<Post[]>();
     const {title} = useParams();
-    console.log(title);
     
 
     useEffect(() => {

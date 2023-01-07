@@ -3,6 +3,7 @@ import axios, { AxiosInstance } from 'axios';
 import UsernamePasswordInput from './types/UsernamePasswordInput';
 import LoginInput from './types/LoginInput';
 import LoggedInUser from './types/LoggedInUser';
+import UpdatePasswordData from './types/UpdatePasswordData';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -66,6 +67,28 @@ export const countNewUsersForDay = async (axiosPrivate: AxiosInstance, date?: st
         else{
             return (await axiosPrivate.get('/users/count/total')).data;
         }
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const changePassword = async (axiosPrivate: AxiosInstance, payload: UpdatePasswordData, id: number): Promise<void> => {
+    try{
+         await axiosPrivate.patch(`/users/update-pass/${id}`, {
+            userId: payload.userId,
+            oldPassword: payload.oldPassword,
+            newPassword: payload.newPassword
+        });
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const getPasswordForUser = async (axiosPrivate: AxiosInstance, userId: number) => {
+    try{
+        return (await axiosPrivate.get(`/users/pass`, {params: {id: userId}})).data;
     }
     catch(err){
         console.error(err);

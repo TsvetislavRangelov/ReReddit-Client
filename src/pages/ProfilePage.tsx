@@ -82,7 +82,7 @@ const Profile = () => {
   return (
     <div className="flex flex-row justify-center">
       <div>
-        <ProfileCard user={foundUser!} send={publishMessage}></ProfileCard>
+        <ProfileCard user={foundUser!}></ProfileCard>
       </div>
       <div>
         {posts ? (

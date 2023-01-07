@@ -31,9 +31,9 @@ const CreateComment = (props: CreateCommentProps) => {
     commentData: CreateCommentData
   ) => {
     const user = await getUser(auth.id, axiosPrivate);
-    commentData.author = user!;
-    commentData.post = props.post;
-    await createComment(commentData);
+    commentData.authorId = auth.id;
+    commentData.postId = props.post.id;
+    await createComment(axiosPrivate, commentData);
   };
 
   return (
