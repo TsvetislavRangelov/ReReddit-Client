@@ -4,6 +4,7 @@ import UsernamePasswordInput from './types/UsernamePasswordInput';
 import LoginInput from './types/LoginInput';
 import LoggedInUser from './types/LoggedInUser';
 import UpdatePasswordData from './types/UpdatePasswordData';
+import PasswordValidationInput from './types/PasswordValidationInput';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -77,7 +78,6 @@ export const changePassword = async (axiosPrivate: AxiosInstance, payload: Updat
     try{
          await axiosPrivate.patch(`/users/update-pass/${id}`, {
             userId: payload.userId,
-            oldPassword: payload.oldPassword,
             newPassword: payload.newPassword
         });
     }
@@ -86,9 +86,12 @@ export const changePassword = async (axiosPrivate: AxiosInstance, payload: Updat
     }
 }
 
-export const getPasswordForUser = async (axiosPrivate: AxiosInstance, userId: number) => {
+export const validatePasswordForUser = async (axiosPrivate: AxiosInstance, payload: PasswordValidationInput) => {
     try{
-        return (await axiosPrivate.get(`/users/pass`, {params: {id: userId}})).data;
+        return (await axiosPrivate.post(`/users/pass`, {
+            userId: payload.userId,
+            oldPassword: payload.oldPassword
+        })).data;
     }
     catch(err){
         console.error(err);

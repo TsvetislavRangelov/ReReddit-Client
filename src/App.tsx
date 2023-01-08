@@ -11,6 +11,7 @@ import ProfilePage from "./pages/ProfilePage";
 import InboxPage from "./pages/InboxPage";
 import AdminDashboard from "./pages/AdminDashboard";
 import PostSearchResults from "./pages/PostSearchResults";
+import ChangePassword from "./pages/ChangePassword";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
         <Route path="/inbox/:id" element={<InboxPage></InboxPage>} />
         <Route path="/AdminDashboard" element={<AdminDashboard></AdminDashboard>}></Route>
         <Route path="/search/:title" element={<PostSearchResults></PostSearchResults>}></Route>
+        <Route path="/change-pass" element={<ChangePassword></ChangePassword>}></Route>
         <Route path="/"></Route>
       </Routes>
     </>
