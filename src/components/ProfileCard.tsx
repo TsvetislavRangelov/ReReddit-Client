@@ -19,7 +19,6 @@ const ProfileCard = ({ user}: ProfileCardProps) => {
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [isOpen, setIsOpen] = useState<boolean>(false);
   const [isPasswordVisible, setIsPasswordVisible] = useState<boolean>(false);
-  const [oldPassword, setOldPassword] = useState<string>('');
   const [generatedPassword, setGeneratedPassword] = useState<string>('');
   const [oldPasswordMatches, setOldPasswordMatches] = useState<boolean>(false);
   const refresh = useRefresh();

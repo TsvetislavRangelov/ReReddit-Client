@@ -1,30 +1,17 @@
-import { Client, IMessage } from "@stomp/stompjs";
-import { AxiosInstance } from "axios";
+import { IMessage } from "@stomp/stompjs";
 import React, { useEffect } from "react";
 import { useState } from "react";
 import { Navigate, useLocation, useParams } from "react-router";
-import InboxQueryParams from "../api/params/InboxQueryParams";
 import { AuthContextType } from "../api/types/AuthTyped";
 import Message from "../api/types/Message";
 import ChatMessages from "../components/ChatMessages";
-import UserFilter from "../components/UserFilter";
 import { AuthContext } from "../context/AuthProvider";
-import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
-import useRefresh from "../custom-hooks/useRefresh";
 import { client } from "../websocket/stompClient";
 
 const InboxPage = () => {
-  const params = useParams<InboxQueryParams>();
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [messages, setMessages] = useState<Message[]>([]);
   const location = useLocation();
-  // const parsedId = Number(params.id);
-  // const refresh = useRefresh();
-  // const axiosPrivate = useAxiosPrivate(
-  //   refresh,
-  //   auth,
-  //   saveAuth
-  // ) as AxiosInstance;
 
   useEffect(() => {
     client.onConnect = (frame) => {

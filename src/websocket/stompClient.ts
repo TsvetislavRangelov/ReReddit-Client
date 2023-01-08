@@ -59,6 +59,7 @@ export const receive = async (source: string): Promise<void> => {
 }
 
 export const publishMessage = (sender: string, destination: string, body: string): void => {
+    const date = new Date();
     const payload = {'id': uuidv4(), 'from': sender, 'body': body};
     client.publish({destination: destination, body: JSON.stringify(payload)});
 
