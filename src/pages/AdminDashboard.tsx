@@ -112,20 +112,20 @@ const AdminDashboard = () => {
             <h4>Send an announcement to all users</h4>
             <Form onSubmit={handleSubmit(onSubmit)}>
                 <Form.Control
-                type="text"
+                as="textarea"
                 style={{ color: "white", backgroundColor: "black" }}
                 placeholder="Enter an announcement"
                 {...register("body", {required: true})}
                 >
                     
                 </Form.Control>
-                <Button variant="primary" type="submit">
+                <Button className="mt-2" variant="primary" type="submit">
                     Submit
                 </Button>
             </Form>
         </div>
         <div  className="mt-4  text-white">
-        <h1 className="ml-4">User List</h1>
+        <h1 className="ml-2">Find A User</h1>
         <UserFilter></UserFilter>
       </div>
     </div>)

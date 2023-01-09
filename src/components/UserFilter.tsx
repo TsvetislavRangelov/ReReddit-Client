@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
+import { Link } from "react-router-dom";
 import { axiosPrivate } from "../api/AxiosPrivate";
 import { AuthContextType } from "../api/types/AuthTyped";
 import LoggedInUser from "../api/types/LoggedInUser";
@@ -9,7 +10,7 @@ const UserFilter = () => {
   const [users, setUsers] = useState<LoggedInUser[]>();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LoggedInUser[]>();
-  const [buttonText, setButtonText] = useState<string>('Ban');
+
 
   useEffect(() => {
     getUsers(axiosPrivate).then((res) => {
@@ -46,23 +47,8 @@ const UserFilter = () => {
               return (
                 <div className="flex flex-row mt-1">
                   <li className="mr-2" key={user.username}>
-                    {user.username}
+                    <Link className="no-underline text-white" to={`/user/${user.id}`}>{user.username}</Link>
                   </li>
-                  <Button
-                    className=""
-                    variant="primary"
-                    size="sm"
-                    onClick={() => {
-                      if(buttonText === 'Ban'){
-                        setButtonText('Unban');
-                      }
-                      else{
-                        setButtonText('Ban');
-                      }
-                    }}
-                  >
-                    {buttonText}
-                  </Button>
                 </div>
               );
             })}

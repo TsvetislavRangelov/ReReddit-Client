@@ -2,6 +2,7 @@ import axiosInstance from "./AxiosConfig";
 import axios, { AxiosInstance } from 'axios';
 import { Post } from "./types/Post";
 import CreatePostData from "./types/CreatePostData";
+import UpvotePostData from "./types/UpvotePostData";
 
 export const getPosts = async (page?: number, size?: number): Promise<Post[]| undefined> => {
 
@@ -54,4 +55,16 @@ export const getPostCount = async (axiosPrivate: AxiosInstance, date?: string): 
         console.error(err);
     }
     
+}
+export const upvote = async (axiosPrivate: AxiosInstance, data: UpvotePostData): Promise<void> => {
+    try{
+        await axiosPrivate.patch(`/posts/upvote`, {
+            userId: data.userId,
+            postId: data.postId,
+            type: data.type
+        });
+    }
+    catch(err){
+        console.error(err);
+    }
 }

@@ -1,10 +1,16 @@
+import { AxiosInstance } from "axios";
 import React from "react";
 import { useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
+import { ArrowDown, ArrowUp } from "react-bootstrap-icons";
 import { getCommentsForPost } from "../api/CommentAPI";
+import { upvote } from "../api/PostAPI";
 import { AuthContextType } from "../api/types/AuthTyped";
 import Comment from "../api/types/Comment";
+import UpvotePostData from "../api/types/UpvotePostData";
 import { AuthContext } from "../context/AuthProvider";
+import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
+import useRefresh from "../custom-hooks/useRefresh";
 import CommentContainer from "./CommentContainer";
 import CreateComment from "./CreateComment";
 import ViewPostProps from "./props/ViewPostProps";
@@ -12,12 +18,29 @@ import ViewPostProps from "./props/ViewPostProps";
 const ViewPost = (props: ViewPostProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
+  const [upvoteCount, setUpvoteCount] = useState<number>(props.foundPost.ups);
+  const refresh = useRefresh();
+  const axiosPrivate = useAxiosPrivate(
+    refresh,
+    auth,
+    saveAuth
+  ) as AxiosInstance;
 
   useEffect(() => {
     getCommentsForPost(props.foundPost.id).then((res) => {
       setComments(res!);
     });
   }, []);
+
+  const upvotePost = () => {
+    const data: UpvotePostData = {
+      userId: auth.id,
+      postId: props.foundPost.id,
+      type: '+'
+    }
+    upvote(axiosPrivate, data);
+    setUpvoteCount(upvoteCount + 1);
+  }
 
   const commentRenderer = comments.map((comment) => (
     <CommentContainer
@@ -35,43 +58,21 @@ const ViewPost = (props: ViewPostProps) => {
     <div className="w-50 bg-gray-800 min-h-fit  text-white">
       <div className="ml-4 flex flex-col border-1  text-white">
         <div className="flex flex-row  text-white">
-          <button className="hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8  text-white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M8.25 6.75L12 3m0 0l3.75 3.75M12 3v18"
-              />
-            </svg>
+          <button className="hover:bg-green-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+                  onClick={upvotePost}
+                  disabled={!auth.id ? true : false}
+                    >
+            <ArrowUp size={35} color="green"></ArrowUp>
           </button>
-          <p>{props.foundPost.ups}</p>
+          <p style={{color: 'green'}}>{upvoteCount}</p>
         </div>
         <br />
         <div className="flex flex-row">
-          <button className="hover:bg-blue-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={1.5}
-              stroke="currentColor"
-              className="w-8 h-8  text-white"
-            >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                d="M15.75 17.25L12 21m0 0l-3.75-3.75M12 21V3"
-              />
-            </svg>
+          <button className="hover:bg-red-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          >
+           <ArrowDown size={35} color='red'></ArrowDown>
           </button>
-          <p>{props.foundPost.downs}</p>
+          <p style={{color: 'red'}}>{props.foundPost.downs}</p>
         </div>
         <div className="flex flex-row ">
           <strong>
