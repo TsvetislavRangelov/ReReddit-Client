@@ -3,6 +3,8 @@ import axios, { AxiosInstance } from 'axios';
 import { Post } from "./types/Post";
 import CreatePostData from "./types/CreatePostData";
 import UpvotePostData from "./types/UpvotePostData";
+import DownvotePostData from "./types/DownvotePostData";
+import hasVotedData from "./types/HasVotedData";
 
 export const getPosts = async (page?: number, size?: number): Promise<Post[]| undefined> => {
 
@@ -63,6 +65,31 @@ export const upvote = async (axiosPrivate: AxiosInstance, data: UpvotePostData):
             postId: data.postId,
             type: data.type
         });
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const downvote = async (axiosPrivate: AxiosInstance, data: DownvotePostData): Promise<void> => {
+    try{
+        await axiosPrivate.patch('/posts/downvote', {
+            userId: data.userId,
+            postId: data.postId,
+            type: data.type
+        })
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const hasVoted = async (axiosPrivate: AxiosInstance, data: hasVotedData) => {
+    try{
+        return (await axiosPrivate.post('/posts/has-voted', {
+            userId: data.userId,
+            postId: data.postId
+        })).data
     }
     catch(err){
         console.error(err);

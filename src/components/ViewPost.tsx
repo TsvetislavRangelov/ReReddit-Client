@@ -4,9 +4,10 @@ import { useEffect, useState } from "react";
 import { Stack } from "react-bootstrap";
 import { ArrowDown, ArrowUp } from "react-bootstrap-icons";
 import { getCommentsForPost } from "../api/CommentAPI";
-import { upvote } from "../api/PostAPI";
+import { downvote, hasVoted, upvote } from "../api/PostAPI";
 import { AuthContextType } from "../api/types/AuthTyped";
 import Comment from "../api/types/Comment";
+import DownvotePostData from "../api/types/DownvotePostData";
 import UpvotePostData from "../api/types/UpvotePostData";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
@@ -19,6 +20,9 @@ const ViewPost = (props: ViewPostProps) => {
   const [comments, setComments] = useState<Comment[]>([]);
   const { auth, saveAuth } = React.useContext(AuthContext) as AuthContextType;
   const [upvoteCount, setUpvoteCount] = useState<number>(props.foundPost.ups);
+  const [downvoteCount, setDownvoteCount] = useState<number>(props.foundPost.downs);
+  const [previousVote, setPreviousVote] = useState<boolean>(false);
+  const [voteType, setVoteType] = useState<string>('');
   const refresh = useRefresh();
   const axiosPrivate = useAxiosPrivate(
     refresh,
@@ -30,6 +34,17 @@ const ViewPost = (props: ViewPostProps) => {
     getCommentsForPost(props.foundPost.id).then((res) => {
       setComments(res!);
     });
+    if(auth.id){
+      hasVoted(axiosPrivate, {userId: auth.id, postId: props.foundPost.id})
+      .then((res) => {
+        if(res.hasVoted){
+          setPreviousVote(true);
+          setVoteType(res.type);
+        }
+      })
+    }
+    console.log(previousVote);
+    console.log(voteType);
   }, []);
 
   const upvotePost = () => {
@@ -39,7 +54,24 @@ const ViewPost = (props: ViewPostProps) => {
       type: '+'
     }
     upvote(axiosPrivate, data);
-    setUpvoteCount(upvoteCount + 1);
+    if(!previousVote){
+      setUpvoteCount(upvoteCount + 1);
+    }
+    setPreviousVote(true);
+    setVoteType('+');
+  }
+  const downvotePost = () => {
+    const data: DownvotePostData = {
+      userId: auth.id,
+      postId: props.foundPost.id,
+      type: '-'
+    }
+    downvote(axiosPrivate, data);
+    if(!previousVote){
+      setDownvoteCount(downvoteCount + 1);
+    }
+    setPreviousVote(true);
+    setVoteType('-');
   }
 
   const commentRenderer = comments.map((comment) => (
@@ -60,19 +92,21 @@ const ViewPost = (props: ViewPostProps) => {
         <div className="flex flex-row  text-white">
           <button className="hover:bg-green-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
                   onClick={upvotePost}
-                  disabled={!auth.id ? true : false}
+                  disabled={!auth.id ? true : false || previousVote}
                     >
-            <ArrowUp size={35} color="green"></ArrowUp>
+            <ArrowUp size={35} color={previousVote && voteType === '+' ? "yellow" : "green"}></ArrowUp>
           </button>
           <p style={{color: 'green'}}>{upvoteCount}</p>
         </div>
         <br />
         <div className="flex flex-row">
           <button className="hover:bg-red-600 active:bg-blue-700 focus:outline-none focus:ring focus:ring-blue-300"
+          onClick={downvotePost}
+          disabled={!auth.id ? true : false || previousVote}
           >
-           <ArrowDown size={35} color='red'></ArrowDown>
+           <ArrowDown size={35} color={previousVote && voteType === '-' ? "yellow" : "red"}></ArrowDown>
           </button>
-          <p style={{color: 'red'}}>{props.foundPost.downs}</p>
+          <p style={{color: 'red'}}>{downvoteCount}</p>
         </div>
         <div className="flex flex-row ">
           <strong>
