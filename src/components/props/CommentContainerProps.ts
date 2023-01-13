@@ -7,6 +7,8 @@ type CommentContainerProps = {
     ups: number;
     downs: number;
     createdAt: Date;
+    SetFetchAgain: any;
+    fetchAgain: boolean;
 }
 
 export default CommentContainerProps;

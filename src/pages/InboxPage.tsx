@@ -1,6 +1,7 @@
 import { IMessage } from "@stomp/stompjs";
 import React, { useEffect } from "react";
 import { useState } from "react";
+import { Spinner } from "react-bootstrap";
 import { Navigate, useLocation, useParams } from "react-router";
 import { AuthContextType } from "../api/types/AuthTyped";
 import Message from "../api/types/Message";
@@ -39,10 +40,12 @@ const InboxPage = () => {
   return (
     <div className="flex flex-col align-center items-center">
       {messages?.length === 0 ? (
-        <h1 className="text-white text-center w-50 h-100">
-          No new announcements have been received. When you do receive a new
-          one, it will become available here.
-        </h1>
+        <>
+          <h1 className="text-white text-center w-50 h-100 mt-80">
+            Waiting to receive notifications.
+          </h1>
+          <Spinner variant="warning"></Spinner>
+        </>
       ) : (
         <div>
           <ChatMessages messages={messages}></ChatMessages>

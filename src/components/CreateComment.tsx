@@ -5,7 +5,6 @@ import { SubmitHandler, useForm } from "react-hook-form";
 import { createComment } from "../api/CommentAPI";
 import { AuthContextType } from "../api/types/AuthTyped";
 import { CreateCommentData } from "../api/types/CreateCommentData";
-import { getUser } from "../api/UserAPI";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
@@ -30,7 +29,6 @@ const CreateComment = (props: CreateCommentProps) => {
   const onSubmit: SubmitHandler<CreateCommentData> = async (
     commentData: CreateCommentData
   ) => {
-    const user = await getUser(auth.id, axiosPrivate);
     commentData.authorId = auth.id;
     commentData.postId = props.post.id;
     await createComment(axiosPrivate, commentData);
@@ -40,7 +38,7 @@ const CreateComment = (props: CreateCommentProps) => {
     <div>
       <Form className="border-t ml-4" onSubmit={handleSubmit(onSubmit)}>
         <Form.Group>
-          <Form.Label>Share your thoughts!</Form.Label>
+          <Form.Label className="text-xl mt-2">Share your thoughts!</Form.Label>
         </Form.Group>
         <textarea
           rows={6}
@@ -48,7 +46,10 @@ const CreateComment = (props: CreateCommentProps) => {
           placeholder="Enter comment"
           {...register("body", { required: true })}
         />
-        {errors.body && <span>A comment body is required</span>}
+        <br />
+        {errors.body && (
+          <span className="text-red-500">A comment body is required</span>
+        )}
         <Form.Group>
           <Button variant="primary" type="submit">
             Comment

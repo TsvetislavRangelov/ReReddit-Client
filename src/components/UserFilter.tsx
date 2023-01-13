@@ -47,7 +47,7 @@ const UserFilter = () => {
                 <div className="mr-6 mt-2 border-2 rounded border-stone-500">
                   <li className="" key={user.username}>
                     <NavLink
-                      className="no-underline text-green-400 flex flex-row hover:text-red-500 justify-center"
+                      className="no-underline text-green-400 flex flex-row hover:text-blue-500 justify-center"
                       to={`/user/${user.id}`}
                     >
                       <PersonBadge size={25} />

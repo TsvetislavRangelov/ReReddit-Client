@@ -20,7 +20,7 @@ const ChatMessages = (props: ChatMessagesProps) => {
 
   return (
     <>
-      <h2 className="text-white text-center">Notifications</h2>
+      <h2 className="text-white text-center mt-2">Notifications</h2>
       {props.messages.map((message) => (
         <>
           <Stack gap={3} className="col-md-4 mx-auto">
@@ -35,7 +35,7 @@ const ChatMessages = (props: ChatMessagesProps) => {
                 </OverlayTrigger>
               </div>
               <Alert.Heading>Sent by {message.from}</Alert.Heading>
-              <p>{message.body}</p>
+              <p className="break-words">{message.body}</p>
               <hr />
               <p className="mb-0">{generateTimestamp()}</p>
             </Alert>

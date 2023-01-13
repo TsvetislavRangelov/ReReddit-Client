@@ -5,7 +5,7 @@ const PostContainer = (props: Post) => {
   return (
     <div
       key={props.id}
-      className="border-2 mt-2 items-center flex text-left bg-gray-900  text-white"
+      className="border-2 mt-2 items-center flex text-left bg-gray-900  text-white break-words"
     >
       <div className="flex flex-column">
         <svg
@@ -22,7 +22,9 @@ const PostContainer = (props: Post) => {
             d="M8.25 6.75L12 3m0 0l3.75 3.75M12 3v18"
           />
         </svg>
-        <p style={{ color: "green" }} className="ml-3">{props.ups}</p>
+        <p style={{ color: "green" }} className="ml-3">
+          {props.ups}
+        </p>
         <svg
           xmlns="http://www.w3.org/2000/svg"
           fill="none"
@@ -37,7 +39,9 @@ const PostContainer = (props: Post) => {
             d="M15.75 17.25L12 21m0 0l-3.75-3.75M12 21V3"
           />
         </svg>
-        <p style={{ color: "red" }} className="ml-3">{props.downs}</p>
+        <p style={{ color: "red" }} className="ml-3">
+          {props.downs}
+        </p>
       </div>
       <div>
         <div className="flex flex-col">
@@ -54,7 +58,7 @@ const PostContainer = (props: Post) => {
             <h5 className="mr-4">Posted by {props.author.username}</h5>
           </NavLink>
         </div>
-        <p>{props.body}</p>
+        <p className="break-all pr-2">{props.body}</p>
       </div>
     </div>
   );
