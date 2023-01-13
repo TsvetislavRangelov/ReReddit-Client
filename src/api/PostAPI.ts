@@ -1,13 +1,15 @@
 import axiosInstance from "./AxiosConfig";
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import { Post } from "./types/Post";
 import CreatePostData from "./types/CreatePostData";
-import { axiosAuth } from "./auth/AxiosAuth";
+import UpvotePostData from "./types/UpvotePostData";
+import DownvotePostData from "./types/DownvotePostData";
+import hasVotedData from "./types/HasVotedData";
 
-export const getPosts = async (): Promise<Post[]| undefined> => {
+export const getPosts = async (page?: number, size?: number): Promise<Post[]| undefined> => {
 
     try{
-    return (await axiosInstance.get("/posts")).data.posts as Post[];
+    return (await axiosInstance.get("/posts", {params: {page: page, size: size}})).data.posts as Post[];
     }
     catch(error){
         if(axios.isAxiosError(error)){
@@ -27,10 +29,10 @@ export const getPost = async (id: number): Promise<Post | undefined> => {
 }
 }
 
-export const createPost = async (postData: CreatePostData): Promise<number | undefined> => {
+export const createPost = async (postData: CreatePostData, axiosPrivate: AxiosInstance): Promise<number | undefined> => {
     try{
-        return(await axiosAuth.post(`/posts`, {
-            author: postData.author,
+        return(await axiosPrivate.post(`/posts`, {
+            authorId: postData.author.id,
             header: postData.header,
             body: postData.body
         })).data.id as number;
@@ -39,5 +41,57 @@ export const createPost = async (postData: CreatePostData): Promise<number | und
         if(axios.isAxiosError(error)){
             console.error(error.message);
         }
+    }
+}
+
+export const getPostCount = async (axiosPrivate: AxiosInstance, date?: string): Promise<number | undefined> => {
+    try{
+        if(date){
+            return (await axiosPrivate.get(`/posts/count?date=${date}`)).data;
+        }
+        else{
+            return (await axiosPrivate.get('/posts/total')).data;
+        }
+    }
+    catch(err){
+        console.error(err);
+    }
+    
+}
+export const upvote = async (axiosPrivate: AxiosInstance, data: UpvotePostData): Promise<void> => {
+    try{
+        await axiosPrivate.patch(`/posts/upvote`, {
+            userId: data.userId,
+            postId: data.postId,
+            type: data.type
+        });
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const downvote = async (axiosPrivate: AxiosInstance, data: DownvotePostData): Promise<void> => {
+    try{
+        await axiosPrivate.patch('/posts/downvote', {
+            userId: data.userId,
+            postId: data.postId,
+            type: data.type
+        })
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const hasVoted = async (axiosPrivate: AxiosInstance, data: hasVotedData) => {
+    try{
+        return (await axiosPrivate.post('/posts/has-voted', {
+            userId: data.userId,
+            postId: data.postId
+        })).data
+    }
+    catch(err){
+        console.error(err);
     }
 }

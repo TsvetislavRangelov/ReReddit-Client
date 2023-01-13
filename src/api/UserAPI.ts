@@ -1,9 +1,10 @@
 import axiosInstance from './AxiosConfig';
-import axios from 'axios';
+import axios, { AxiosInstance } from 'axios';
 import UsernamePasswordInput from './types/UsernamePasswordInput';
 import LoginInput from './types/LoginInput';
 import LoggedInUser from './types/LoggedInUser';
-import { axiosAuth } from './auth/AxiosAuth';
+import UpdatePasswordData from './types/UpdatePasswordData';
+import PasswordValidationInput from './types/PasswordValidationInput';
 
 
 export const registerUser = async (credentials: UsernamePasswordInput): Promise<number | undefined> => {
@@ -22,12 +23,12 @@ export const registerUser = async (credentials: UsernamePasswordInput): Promise<
     }
     };
 
-export const login = async (credentials: LoginInput): Promise<string | undefined> => {
+export const login = async (credentials: LoginInput): Promise<any | undefined> => {
         try{
         return (await axiosInstance.post("/login", {
             email: credentials.email,
             password: credentials.password
-        })).data.token as string;
+        })).data;
         
         }
         catch(error){
@@ -37,13 +38,62 @@ export const login = async (credentials: LoginInput): Promise<string | undefined
         }
 }
 
-export const getUser = async(id: number): Promise<LoggedInUser | undefined> => {
+export const getUser = async(id: number, axiosPrivate: AxiosInstance): Promise<LoggedInUser | undefined> => {
     try{
-        return (await axiosAuth.get(`/users/${id}`)).data as LoggedInUser;
+        return (await axiosPrivate.get(`/users/user`, {params: {id: id}})).data as LoggedInUser;
     }
     catch(error){
         if(axios.isAxiosError(error)){
             console.error(error.message, error.code);
         }
+    }
+}
+
+export const getUsers = async (axiosPrivate: AxiosInstance) => {
+    try{
+        return (await axiosPrivate.get('/users')).data.users as LoggedInUser[];
+    }
+    catch(error){
+        if(axios.isAxiosError(error)){
+            console.error(error.message, error.code);
+        }
+    }
+}
+
+export const countNewUsersForDay = async (axiosPrivate: AxiosInstance, date?: string) => {
+    try{
+        if(date){
+            return (await axiosPrivate.get(`/users/count?date=${date}`)).data;
+        }
+        else{
+            return (await axiosPrivate.get('/users/count/total')).data;
+        }
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const changePassword = async (axiosPrivate: AxiosInstance, payload: UpdatePasswordData, id: number): Promise<void> => {
+    try{
+         await axiosPrivate.patch(`/users/update-pass/${id}`, {
+            userId: payload.userId,
+            newPassword: payload.newPassword
+        });
+    }
+    catch(err){
+        console.error(err);
+    }
+}
+
+export const validatePasswordForUser = async (axiosPrivate: AxiosInstance, payload: PasswordValidationInput) => {
+    try{
+        return (await axiosPrivate.post(`/users/pass`, {
+            userId: payload.userId,
+            oldPassword: payload.oldPassword
+        })).data;
+    }
+    catch(err){
+        console.error(err);
     }
 }
