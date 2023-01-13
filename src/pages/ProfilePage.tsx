@@ -84,7 +84,7 @@ const Profile = () => {
         {posts?.length! > 0 ? (
           <div className="flex flex-col">
             <h2 className="col-md-6 mx-auto text-white text-center">
-              {foundUser.username}'s posts
+              {foundUser.username}'s Posts
             </h2>
             <Stack gap={3} className="col-md-6 mx-auto">
               {postRenderer}

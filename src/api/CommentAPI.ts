@@ -26,3 +26,12 @@ export const getCommentsForPost = async (postId: number) : Promise<Comment[] | u
         console.error(err);
     }
 }
+
+export const deleteComment = async(id: number) : Promise<any> => {
+    try{
+        await axiosInstance.delete(`/comments/${id}`);
+    }
+    catch(err){
+        return "err";
+    }
+}
