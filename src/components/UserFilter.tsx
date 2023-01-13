@@ -1,16 +1,15 @@
 import { useEffect, useState } from "react";
 import { Button, Form } from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { axiosPrivate } from "../api/AxiosPrivate";
-import { AuthContextType } from "../api/types/AuthTyped";
 import LoggedInUser from "../api/types/LoggedInUser";
 import { getUsers } from "../api/UserAPI";
+import { PersonBadge } from "react-bootstrap-icons";
 
 const UserFilter = () => {
   const [users, setUsers] = useState<LoggedInUser[]>();
   const [query, setQuery] = useState("");
   const [results, setResults] = useState<LoggedInUser[]>();
-
 
   useEffect(() => {
     getUsers(axiosPrivate).then((res) => {
@@ -45,9 +44,15 @@ const UserFilter = () => {
           ? ""
           : results?.map((user) => {
               return (
-                <div className="flex flex-row mt-1">
-                  <li className="mr-2" key={user.username}>
-                    <Link className="no-underline text-white" to={`/user/${user.id}`}>{user.username}</Link>
+                <div className="mr-6 mt-2 border-2 rounded border-stone-500">
+                  <li className="" key={user.username}>
+                    <NavLink
+                      className="no-underline text-green-400 flex flex-row hover:text-red-500 justify-center"
+                      to={`/user/${user.id}`}
+                    >
+                      <PersonBadge size={25} />
+                      <h4>{user.username}</h4>
+                    </NavLink>
                   </li>
                 </div>
               );

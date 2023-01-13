@@ -11,13 +11,9 @@ import { getPostsByUserId } from "../api/UserPostAPI";
 import NotFound404 from "../components/errors/NotFound404";
 import PostContainer from "../components/PostContainer";
 import ProfileCard from "../components/ProfileCard";
-import ServerError from "../components/ServerError";
 import { AuthContext } from "../context/AuthProvider";
 import useAxiosPrivate from "../custom-hooks/useAxiosPrivate";
 import useRefresh from "../custom-hooks/useRefresh";
-import {
-  publishMessage,
-} from "../websocket/stompClient";
 
 const Profile = () => {
   const params = useParams<UserQueryParams>();
@@ -85,14 +81,23 @@ const Profile = () => {
         <ProfileCard user={foundUser!}></ProfileCard>
       </div>
       <div>
-        {posts ? (
+        {posts?.length! > 0 ? (
           <div className="flex flex-col">
+            <h2 className="col-md-6 mx-auto text-white text-center">
+              {foundUser.username}'s posts
+            </h2>
             <Stack gap={3} className="col-md-6 mx-auto">
               {postRenderer}
             </Stack>
           </div>
         ) : (
-          <ServerError message="no posts were found for this user"></ServerError>
+          <div className="col-md-6 mx-auto text-white text-center">
+            <h3>
+              This user has not made any posts yet. When they do, they will show
+              up here!
+            </h3>
+            <Spinner animation="grow" />
+          </div>
         )}
       </div>
     </div>
